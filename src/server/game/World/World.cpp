@@ -79,6 +79,7 @@
 #include "WorldSession.h"
 #include "ChatPackets.h"
 #include "WorldSocket.h"
+#include "M2Stores.h"
 
 #include <boost/algorithm/string.hpp>
 
@@ -1547,6 +1548,8 @@ void World::SetInitialWorldSettings()
     sDB2Manager.LoadHotfixData();
     ///- Close hotfix database - it is only used during DB2 loading
     HotfixDatabase.Close();
+    ///- Load M2 fly by cameras
+    LoadM2Cameras(m_dataPath);
     ///- Load GameTables
     LoadGameTables(m_dataPath);
 
