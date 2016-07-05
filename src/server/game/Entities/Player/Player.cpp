@@ -15097,8 +15097,12 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, 
         SetSeasonalQuestStatus(quest_id);
 
     RemoveActiveQuest(quest_id, false);
-    m_RewardedQuests.insert(quest_id);
-    m_RewardedQuestsSave[quest_id] = QUEST_DEFAULT_SAVE_TYPE;
+    if (quest->CanIncreaseRewardedQuestCounters())
+    {
+        m_RewardedQuests.insert(quest_id);
+        m_RewardedQuestsSave[quest_id] = QUEST_DEFAULT_SAVE_TYPE;
+    }
+
     // StoreNewItem, mail reward, etc. save data directly to the database
     // to prevent exploitable data desynchronisation we save the quest status to the database too
     // (to prevent rewarding this quest another time while rewards were already given out)
@@ -18782,7 +18786,8 @@ void Player::_LoadQuestStatusRewarded(PreparedQueryResult result)
                                 GetSession()->GetCollectionMgr()->AddItemAppearance(questPackageItem->ItemID);
             }
 
-            m_RewardedQuests.insert(quest_id);
+            if (quest->CanIncreaseRewardedQuestCounters())
+                m_RewardedQuests.insert(quest_id);
         }
         while (result->NextRow());
     }
