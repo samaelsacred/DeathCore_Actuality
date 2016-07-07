@@ -2271,6 +2271,7 @@ public:
         {
             me->StopMoving();
             me->SetUInt32Value(UNIT_NPC_FLAGS, 0);
+            me->SetUInt32Value(UNIT_NPC_EMOTESTATE, 0);
             if (Player* player = ObjectAccessor::GetPlayer(*me, uiPlayerGUID))
                 me->SetFacingToObject(player);
             uiEventTimer = 3000;
@@ -2299,7 +2300,6 @@ public:
                         switch (me->GetEntry())
                         {
                             case NPC_SALTY_JOHN_THORPE:
-                                me->SetUInt32Value(UNIT_NPC_EMOTESTATE, 0);
                                 Talk(SAY_HIDDEN_CULTIST_1);
                                 uiEventTimer = 5000;
                                 uiEventPhase = 2;
