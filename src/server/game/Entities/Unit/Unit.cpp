@@ -11716,9 +11716,8 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* target, uint32 procFlag, u
 
         bool prepare = i->aura->CallScriptPrepareProcHandlers(aurApp, eventInfo);
 
-        // For players set spell cooldown if need
         Milliseconds cooldown = Milliseconds::zero();
-        if (prepare && GetTypeId() == TYPEID_PLAYER)
+        if (prepare)
         {
             cooldown = Milliseconds(spellInfo->ProcCooldown);
             if (i->spellProcEvent && i->spellProcEvent->cooldown)
