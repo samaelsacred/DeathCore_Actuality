@@ -97,7 +97,7 @@ class boss_archaedas : public CreatureScript
                 instance->SetData(0, 5);    // respawn any dead minions
                 me->setFaction(35);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL);
+                me->SetControlled(true, UNIT_STATE_ROOT);
                 me->AddAura(SPELL_FREEZE_ANIM, me);
             }
 
@@ -110,7 +110,7 @@ class boss_archaedas : public CreatureScript
                     DoCast(minion, SPELL_AWAKEN_VAULT_WALKER, flag);
                     minion->CastSpell(minion, SPELL_ARCHAEDAS_AWAKEN, true);
                     minion->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    minion->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL);
+                    minion->SetControlled(false, UNIT_STATE_ROOT);
                     minion->setFaction(14);
                     minion->RemoveAura(SPELL_MINION_FREEZE_ANIM);
                 }
@@ -120,7 +120,7 @@ class boss_archaedas : public CreatureScript
             {
                 me->setFaction(14);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL);
+                me->SetControlled(false, UNIT_STATE_ROOT);
             }
 
             void SpellHit(Unit* /*caster*/, const SpellInfo* spell) override
@@ -260,7 +260,7 @@ class npc_archaedas_minions : public CreatureScript
 
                 me->setFaction(35);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL);
+                me->SetControlled(true, UNIT_STATE_ROOT);
                 me->RemoveAllAuras();
                 me->AddAura(SPELL_MINION_FREEZE_ANIM, me);
             }
@@ -269,8 +269,8 @@ class npc_archaedas_minions : public CreatureScript
             {
                 me->setFaction (14);
                 me->RemoveAllAuras();
-                me->RemoveFlag (UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                me->RemoveFlag (UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL);
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                me->SetControlled(false, UNIT_STATE_ROOT);
                 bAmIAwake = true;
             }
 
@@ -349,7 +349,7 @@ class npc_stonekeepers : public CreatureScript
             {
                 me->setFaction(35);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL);
+                me->SetControlled(true, UNIT_STATE_ROOT);
                 me->RemoveAllAuras();
                 me->AddAura(SPELL_MINION_FREEZE_ANIM, me);
             }
@@ -358,7 +358,7 @@ class npc_stonekeepers : public CreatureScript
             {
                 me->setFaction(14);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL);
+                me->SetControlled(false, UNIT_STATE_ROOT);
             }
 
             void UpdateAI(uint32 /*diff*/) override
