@@ -93,7 +93,7 @@ public:
         {
             if (Creature* midnight = ObjectAccessor::GetCreature(*me, _midnightGUID))
                 BossAI::_DespawnAtEvade(Seconds(10), midnight);
-            
+
             me->DespawnOrUnsummon();
         }
 
@@ -129,7 +129,7 @@ public:
             if (_phase == PHASE_ATTUMEN_ENGAGES && me->HealthBelowPctDamaged(25, damage))
             {
                 _phase = PHASE_NONE;
-                
+
                 if (Creature* midnight = ObjectAccessor::GetCreature(*me, _midnightGUID))
                     midnight->AI()->DoCastAOE(SPELL_MOUNT, true);
             }
