@@ -828,6 +828,9 @@ class npc_toc_druid : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
         };
@@ -921,6 +924,9 @@ class npc_toc_shaman : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
         };
@@ -1025,6 +1031,9 @@ class npc_toc_paladin : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
         };
@@ -1110,6 +1119,9 @@ class npc_toc_priest : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
         };
@@ -1207,6 +1219,9 @@ class npc_toc_shadow_priest : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
                 DoSpellAttackIfReady(SPELL_MIND_FLAY);
             }
@@ -1298,6 +1313,9 @@ class npc_toc_warlock : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
                 DoSpellAttackIfReady(SPELL_SHADOW_BOLT);
             }
@@ -1392,6 +1410,9 @@ class npc_toc_mage : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
                 DoSpellAttackIfReady(SPELL_FROSTBOLT);
             }
@@ -1494,6 +1515,9 @@ class npc_toc_hunter : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
                 DoSpellAttackIfReady(SPELL_SHOOT);
             }
@@ -1586,6 +1610,9 @@ class npc_toc_boomkin : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
                 DoSpellAttackIfReady(SPELL_WRATH);
             }
@@ -1691,6 +1718,9 @@ class npc_toc_warrior : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
         };
@@ -1787,6 +1817,9 @@ class npc_toc_dk : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
         };
@@ -1892,6 +1925,9 @@ class npc_toc_rogue : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
         };
@@ -2023,6 +2059,9 @@ class npc_toc_enh_shaman : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
             private:
@@ -2132,6 +2171,9 @@ class npc_toc_retro_paladin : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
         };
@@ -2184,6 +2226,9 @@ class npc_toc_pet_warlock : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
             }
         };

@@ -279,6 +279,9 @@ class boss_gormok : public CreatureScript
                         default:
                             return;
                     }
+
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
 
                 DoMeleeAttackIfReady();
@@ -613,6 +616,9 @@ struct boss_jormungarAI : public BossAI
                 default:
                     return;
             }
+
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
         }
         if (events.IsInPhase(PHASE_MOBILE))
             DoMeleeAttackIfReady();
@@ -1003,6 +1009,9 @@ class boss_icehowl : public CreatureScript
                                 default:
                                     break;
                             }
+
+                            if (me->HasUnitState(UNIT_STATE_CASTING))
+                                return;
                         }
                         DoMeleeAttackIfReady();
                         break;
@@ -1059,6 +1068,9 @@ class boss_icehowl : public CreatureScript
                                 default:
                                     break;
                             }
+
+                            if (me->HasUnitState(UNIT_STATE_CASTING))
+                                return;
                         }
                         break;
                     case 4:

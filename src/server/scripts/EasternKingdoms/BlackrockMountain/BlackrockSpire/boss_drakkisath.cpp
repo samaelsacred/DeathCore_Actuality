@@ -94,6 +94,9 @@ public:
                         events.ScheduleEvent(EVENT_THUNDERCLAP, 20000);
                         break;
                 }
+
+                if (me->HasUnitState(UNIT_STATE_CASTING))
+                    return;
             }
             DoMeleeAttackIfReady();
         }

@@ -291,10 +291,10 @@ class boss_anubarak_trial : public CreatureScript
                 if (!UpdateVictim())
                     return;
 
+                events.Update(diff);
+
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
-
-                events.Update(diff);
 
                 while (uint32 eventId = events.ExecuteEvent())
                 {
@@ -401,6 +401,8 @@ class boss_anubarak_trial : public CreatureScript
                             break;
                     }
 
+                    if (me->HasUnitState(UNIT_STATE_CASTING))
+                        return;
                 }
 
                 if (HealthBelowPct(30) && events.IsInPhase(PHASE_MELEE) && !_reachedPhase3)
