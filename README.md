@@ -65,9 +65,9 @@ Leia o Arquivo [COPYING](COPYING)
 
 Este projeto é trazido para você graças a:
 
-- Toda a Equipe [DeathCore developers and contributors](https://github.com/NoffearrDeathProjecT/DeathCore/graphs/contributors)
-- Toda a Equipe [TrinityCore developers and contributors](https://github.com/TrinityCore/TrinityCore/blob/3.3.5/THANKS)
-- Toda a Equipe [MaNGOS, ScriptDev2 and UDB developers and contributors](https://github.com/cmangos/mangos-wotlk/blob/master/AUTHORS.md)
+- Toda a Equipe [DeathCore desenvolvedores, programadores e contribuintes](https://github.com/NoffearrDeathProjecT/DeathCore/graphs/contributors)
+- Toda a Equipe [TrinityCore desenvolvedores, programadores e contribuintes](https://github.com/TrinityCore/TrinityCore/blob/3.3.5/THANKS)
+- Toda a Equipe [MaNGOS, ScriptDev2 and UDB desenvolvedores, programadores e contribuintes](https://github.com/cmangos/mangos-wotlk/blob/master/AUTHORS.md)
 
 
 ## Links
