@@ -106,9 +106,6 @@ class boss_toravon : public CreatureScript
                         default:
                             break;
                     }
-
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 DoMeleeAttackIfReady();
@@ -250,8 +247,7 @@ class npc_frozen_orb_stalker : public CreatureScript
             npc_frozen_orb_stalkerAI(Creature* creature) : ScriptedAI(creature)
             {
                 creature->SetVisible(false);
-                creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-                me->SetControlled(true, UNIT_STATE_ROOT);
+                creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_REMOVE_CLIENT_CONTROL);
                 creature->SetReactState(REACT_PASSIVE);
 
                 instance = creature->GetInstanceScript();

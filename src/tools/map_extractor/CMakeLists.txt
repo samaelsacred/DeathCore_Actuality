@@ -17,6 +17,10 @@ CollectSourceFiles(
   ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE_SOURCES)
 
+if (WIN32)
+  list(APPEND PRIVATE_SOURCES ${sources_windows})
+endif()
+
 add_executable(mapextractor
   ${PRIVATE_SOURCES}
 )
@@ -29,7 +33,7 @@ target_include_directories(mapextractor
 target_link_libraries(mapextractor
   PUBLIC
     common
-    mpq)
+    extractor_common)
 
 CollectIncludeDirectories(
   ${CMAKE_CURRENT_SOURCE_DIR}

@@ -115,9 +115,6 @@ public:
                         events.ScheduleEvent(EVENT_FROST_NOVA, 15000);
                         break;
                 }
-
-                if (me->HasUnitState(UNIT_STATE_CASTING))
-                    return;
             }
 
             if (!hp60Spectrals && HealthBelowPct(60))

@@ -160,7 +160,7 @@ public:
                     {
                         for (GuidList::const_iterator itr = EggList.begin(); itr != EggList.end(); ++itr)
                             if (GameObject* egg = instance->GetGameObject(*itr))
-                                egg->SetPhaseMask(2, true);
+                                egg->SetLootState(GO_JUST_DEACTIVATED);
                     }
                     SetData(DATA_EGG_EVENT, NOT_STARTED);
                     break;

@@ -103,7 +103,7 @@ class Grid
         template<class T>
         uint32 GetWorldObjectCountInGrid() const
         {
-            return i_objects.template Count<T>();
+            return uint32(i_objects.template Count<T>());
         }
 
         /** Inserts a container type object into the grid.
@@ -140,4 +140,3 @@ class Grid
         //ActiveGridObjects m_activeGridObjects;
 };
 #endif
-

@@ -105,9 +105,6 @@ class boss_arcanist_doan : public CreatureScript
                         default:
                             break;
                     }
-
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 if (_healthAbove50Pct && HealthBelowPct(50))

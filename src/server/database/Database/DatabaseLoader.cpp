@@ -182,4 +182,6 @@ DatabaseLoader& DatabaseLoader::AddDatabase<LoginDatabaseConnection>(LoginDataba
 template TC_DATABASE_API
 DatabaseLoader& DatabaseLoader::AddDatabase<CharacterDatabaseConnection>(CharacterDatabaseWorkerPool&, std::string const&);
 template TC_DATABASE_API
+DatabaseLoader& DatabaseLoader::AddDatabase<HotfixDatabaseConnection>(HotfixDatabaseWorkerPool&, std::string const&);
+template TC_DATABASE_API
 DatabaseLoader& DatabaseLoader::AddDatabase<WorldDatabaseConnection>(WorldDatabaseWorkerPool&, std::string const&);

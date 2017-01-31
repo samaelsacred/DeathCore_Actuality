@@ -37,6 +37,7 @@ namespace WorldPackets
 
         WorldPacket const* GetRawPacket() const { return &_worldPacket; }
         size_t GetSize() const { return _worldPacket.size(); }
+        ConnectionType GetConnection() const { return _worldPacket.GetConnection(); }
 
     protected:
         WorldPacket _worldPacket;
@@ -45,7 +46,7 @@ namespace WorldPackets
     class ServerPacket : public Packet
     {
     public:
-        ServerPacket(OpcodeServer opcode, size_t initialSize = 200) : Packet(WorldPacket(opcode, initialSize)) { }
+        ServerPacket(OpcodeServer opcode, size_t initialSize = 200, ConnectionType connection = CONNECTION_TYPE_DEFAULT) : Packet(WorldPacket(opcode, initialSize, connection)) { }
 
         void Read() override final { ASSERT(!"Read not implemented for server packets."); }
 

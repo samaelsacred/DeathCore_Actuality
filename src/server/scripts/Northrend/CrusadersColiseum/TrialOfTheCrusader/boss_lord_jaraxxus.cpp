@@ -195,9 +195,6 @@ class boss_jaraxxus : public CreatureScript
                             events.ScheduleEvent(EVENT_SUMMON_INFERNAL_ERUPTION, 2*MINUTE*IN_MILLISECONDS);
                             return;
                     }
-
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 DoMeleeAttackIfReady();
@@ -494,7 +491,7 @@ class spell_mistress_kiss : public SpellScriptLoader
             bool Load() override
             {
                 if (GetCaster())
-                    if (sSpellMgr->GetSpellIdForDifficulty(SPELL_MISTRESS_KISS_DAMAGE_SILENCE, GetCaster()))
+                    if (sSpellMgr->GetSpellInfo(SPELL_MISTRESS_KISS_DAMAGE_SILENCE))
                         return true;
                 return false;
             }

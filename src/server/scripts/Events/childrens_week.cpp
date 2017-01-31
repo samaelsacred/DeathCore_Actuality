@@ -176,7 +176,7 @@ class npc_winterfin_playmate : public CreatureScript
                         {
                             playerGUID = player->GetGUID();
                             orphanGUID = getOrphanGUID(player, ORPHAN_ORACLE);
-                            if (orphanGUID)
+                            if (!orphanGUID.IsEmpty())
                                 phase = 1;
                         }
             }
@@ -283,7 +283,7 @@ class npc_snowfall_glade_playmate : public CreatureScript
                         {
                             playerGUID = player->GetGUID();
                             orphanGUID = getOrphanGUID(player, ORPHAN_WOLVAR);
-                            if (orphanGUID)
+                            if (!orphanGUID.IsEmpty())
                                 phase = 1;
                         }
             }
@@ -389,7 +389,7 @@ class npc_the_biggest_tree : public CreatureScript
                         {
                             playerGUID = player->GetGUID();
                             orphanGUID = getOrphanGUID(player, ORPHAN_ORACLE);
-                            if (orphanGUID)
+                            if (!orphanGUID.IsEmpty())
                                 phase = 1;
                         }
             }
@@ -484,7 +484,7 @@ class npc_high_oracle_soo_roo : public CreatureScript
                         {
                             playerGUID = player->GetGUID();
                             orphanGUID = getOrphanGUID(player, ORPHAN_ORACLE);
-                            if (orphanGUID)
+                            if (!orphanGUID.IsEmpty())
                                 phase = 1;
                         }
             }
@@ -580,7 +580,7 @@ class npc_elder_kekek : public CreatureScript
                         {
                             playerGUID = player->GetGUID();
                             orphanGUID = getOrphanGUID(player, ORPHAN_WOLVAR);
-                            if (orphanGUID)
+                            if (!orphanGUID.IsEmpty())
                                 phase = 1;
                         }
             }
@@ -692,7 +692,7 @@ class npc_the_etymidian : public CreatureScript
                         {
                             playerGUID = player->GetGUID();
                             orphanGUID = getOrphanGUID(player, ORPHAN_ORACLE);
-                            if (orphanGUID)
+                            if (!orphanGUID.IsEmpty())
                                 phase = 1;
                         }
                     }
@@ -814,14 +814,14 @@ class npc_alexstraza_the_lifebinder : public CreatureScript
                         {
                             playerGUID = player->GetGUID();
                             orphanGUID = getOrphanGUID(player, ORPHAN_ORACLE);
-                            if (orphanGUID)
+                            if (!orphanGUID.IsEmpty())
                                 phase = 1;
                         }
                         else if (player->GetQuestStatus(QUEST_THE_DRAGON_QUEEN_WOLVAR) == QUEST_STATUS_INCOMPLETE)
                         {
                             playerGUID = player->GetGUID();
                             orphanGUID = getOrphanGUID(player, ORPHAN_WOLVAR);
-                            if (orphanGUID)
+                            if (!orphanGUID.IsEmpty())
                                 phase = 7;
                         }
                     }
@@ -937,7 +937,7 @@ class at_bring_your_orphan_to : public AreaTriggerScript
     public:
         at_bring_your_orphan_to() : AreaTriggerScript("at_bring_your_orphan_to") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* trigger) override
+        bool OnTrigger(Player* player, AreaTriggerEntry const* areaTrigger, bool /*entered*/) override
         {
             if (player->isDead() || !player->HasAura(SPELL_ORPHAN_OUT))
                 return false;
@@ -945,7 +945,7 @@ class at_bring_your_orphan_to : public AreaTriggerScript
             uint32 questId = 0;
             uint32 orphanId = 0;
 
-            switch (trigger->id)
+            switch (areaTrigger->ID)
             {
                 case AT_DOWN_AT_THE_DOCKS:
                     questId = QUEST_DOWN_AT_THE_DOCKS;
@@ -977,7 +977,7 @@ class at_bring_your_orphan_to : public AreaTriggerScript
                     break;
             }
 
-            if (questId && orphanId && getOrphanGUID(player, orphanId) && player->GetQuestStatus(questId) == QUEST_STATUS_INCOMPLETE)
+            if (questId && orphanId && !getOrphanGUID(player, orphanId).IsEmpty() && player->GetQuestStatus(questId) == QUEST_STATUS_INCOMPLETE)
                 player->AreaExploredOrEventHappens(questId);
 
             return true;
@@ -1038,7 +1038,7 @@ class npc_cw_area_trigger : public CreatureScript
                                     orphanId = ORPHAN_BLOOD_ELF;
                                     break;
                                 case NPC_SILVERMOON_01_CW_TRIGGER:
-                                    if (player->GetQuestStatus(QUEST_NOW_WHEN_I_GROW_UP) == QUEST_STATUS_INCOMPLETE && getOrphanGUID(player, ORPHAN_BLOOD_ELF))
+                                    if (player->GetQuestStatus(QUEST_NOW_WHEN_I_GROW_UP) == QUEST_STATUS_INCOMPLETE && !getOrphanGUID(player, ORPHAN_BLOOD_ELF).IsEmpty())
                                     {
                                         player->AreaExploredOrEventHappens(QUEST_NOW_WHEN_I_GROW_UP);
                                         if (player->GetQuestStatus(QUEST_NOW_WHEN_I_GROW_UP) == QUEST_STATUS_COMPLETE)
@@ -1068,7 +1068,7 @@ class npc_cw_area_trigger : public CreatureScript
                                     }
                                     break;
                             }
-                            if (questId && orphanId && getOrphanGUID(player, orphanId) && player->GetQuestStatus(questId) == QUEST_STATUS_INCOMPLETE)
+                            if (questId && orphanId && !getOrphanGUID(player, orphanId).IsEmpty() && player->GetQuestStatus(questId) == QUEST_STATUS_INCOMPLETE)
                                 player->AreaExploredOrEventHappens(questId);
                         }
             }

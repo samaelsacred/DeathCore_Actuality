@@ -12,6 +12,10 @@ REVOKE ALL PRIVILEGES ON `auth` . * FROM 'deathcore'@'localhost';
 
 REVOKE GRANT OPTION ON `auth` . * FROM 'deathcore'@'localhost';
 
+REVOKE ALL PRIVILEGES ON `hotfixes` . * FROM 'deathcore'@'localhost';
+
+REVOKE GRANT OPTION ON `hotfixes` . * FROM 'deathcore'@'localhost';
+
 DROP USER 'deathcore'@'localhost';
 
 DROP DATABASE IF EXISTS `world`;
@@ -19,3 +23,5 @@ DROP DATABASE IF EXISTS `world`;
 DROP DATABASE IF EXISTS `characters`;
 
 DROP DATABASE IF EXISTS `auth`;
+
+DROP DATABASE IF EXISTS `hotfixes`;

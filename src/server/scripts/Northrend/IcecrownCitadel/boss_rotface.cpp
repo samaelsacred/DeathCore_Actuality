@@ -218,9 +218,6 @@ class boss_rotface : public CreatureScript
                         default:
                             break;
                     }
-
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 DoMeleeAttackIfReady();
@@ -478,8 +475,8 @@ class spell_rotface_ooze_flood : public SpellScriptLoader
                 targets.sort(Trinity::ObjectDistanceOrderPred(GetCaster()));
 
                 // .resize() runs pop_back();
-                if (targets.size() > 5)
-                    targets.resize(5);
+                if (targets.size() > 4)
+                    targets.resize(4);
 
                 while (targets.size() > 2)
                     targets.pop_front();
@@ -540,7 +537,8 @@ class spell_rotface_mutated_infection : public SpellScriptLoader
 
             bool Validate(SpellInfo const* spellInfo) override
             {
-                if (!sSpellMgr->GetSpellInfo(uint32(spellInfo->Effects[EFFECT_2].CalcValue())))
+                SpellEffectInfo const* effect = spellInfo->GetEffect(EFFECT_2);
+                if (!effect || !sSpellMgr->GetSpellInfo(uint32(effect->CalcValue())))
                     return false;
                 return true;
             }
@@ -548,7 +546,7 @@ class spell_rotface_mutated_infection : public SpellScriptLoader
             void HandleEffectRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
             {
                 Unit* target = GetTarget();
-                target->CastSpell(target, uint32(GetSpellInfo()->Effects[EFFECT_2].CalcValue()), true, nullptr, aurEff, GetCasterGUID());
+                target->CastSpell(target, uint32(GetAura()->GetSpellEffectInfo(EFFECT_2)->CalcValue()), true, nullptr, aurEff, GetCasterGUID());
             }
 
             void Register() override
@@ -752,7 +750,7 @@ class spell_rotface_unstable_ooze_explosion : public SpellScriptLoader
                 if (!GetExplTargetDest())
                     return;
 
-                uint32 triggered_spell_id = GetSpellInfo()->Effects[effIndex].TriggerSpell;
+                uint32 triggered_spell_id = GetSpellInfo()->GetEffect(effIndex)->TriggerSpell;
 
                 float x, y, z;
                 GetExplTargetDest()->GetPosition(x, y, z);

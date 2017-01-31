@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2017 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2016-2017 DeathCore <http://www.noffearrdeathproject.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,10 +17,10 @@
 
 #include "QueryCallback.h"
 
-template<typename T>
-inline void Construct(T& t)
+template<typename T, typename... Args>
+inline void Construct(T& t, Args&&... args)
 {
-    new (&t) T();
+    new (&t) T(std::forward<Args>(args)...);
 }
 
 template<typename T>
@@ -103,12 +103,17 @@ private:
     bool _isPrepared;
 };
 
-QueryCallback::QueryCallback(std::future<QueryResult>&& result) : _string(std::move(result)), _isPrepared(false)
+// Not using initialization lists to work around segmentation faults when compiling with clang without precompiled headers
+QueryCallback::QueryCallback(std::future<QueryResult>&& result)
 {
+    _isPrepared = false;
+    Construct(_string, std::move(result));
 }
 
-QueryCallback::QueryCallback(std::future<PreparedQueryResult>&& result) : _prepared(std::move(result)), _isPrepared(true)
+QueryCallback::QueryCallback(std::future<PreparedQueryResult>&& result)
 {
+    _isPrepared = true;
+    Construct(_prepared, std::move(result));
 }
 
 QueryCallback::QueryCallback(QueryCallback&& right)

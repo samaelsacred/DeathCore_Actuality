@@ -86,12 +86,17 @@ void AddSC_instance_wailing_caverns();
 void AddSC_boss_zum_rah();                   //Zul'Farrak
 void AddSC_zulfarrak();
 void AddSC_instance_zulfarrak();
+void AddSC_instance_halls_of_origination();
+void AddSC_boss_temple_guardian_anhuur();
+void AddSC_boss_earthrager_ptah();
+void AddSC_boss_anraphet();
+void AddSC_instance_firelands();
+void AddSC_boss_alysrazor();
 
 void AddSC_ashenvale();
 void AddSC_azshara();
 void AddSC_azuremyst_isle();
 void AddSC_bloodmyst_isle();
-void AddSC_boss_azuregos();
 void AddSC_darkshore();
 void AddSC_desolace();
 void AddSC_durotar();
@@ -99,10 +104,12 @@ void AddSC_dustwallow_marsh();
 void AddSC_felwood();
 void AddSC_feralas();
 void AddSC_moonglade();
+void AddSC_mulgore();
 void AddSC_orgrimmar();
 void AddSC_silithus();
 void AddSC_stonetalon_mountains();
 void AddSC_tanaris();
+void AddSC_teldrassil();
 void AddSC_the_barrens();
 void AddSC_thousand_needles();
 void AddSC_thunder_bluff();
@@ -188,7 +195,6 @@ void AddKalimdorScripts()
     AddSC_azshara();
     AddSC_azuremyst_isle();
     AddSC_bloodmyst_isle();
-    AddSC_boss_azuregos();
     AddSC_darkshore();
     AddSC_desolace();
     AddSC_durotar();
@@ -196,13 +202,23 @@ void AddKalimdorScripts()
     AddSC_felwood();
     AddSC_feralas();
     AddSC_moonglade();
+    AddSC_mulgore();
     AddSC_orgrimmar();
     AddSC_silithus();
     AddSC_stonetalon_mountains();
     AddSC_tanaris();
+    AddSC_teldrassil();
     AddSC_the_barrens();
     AddSC_thousand_needles();
     AddSC_thunder_bluff();
     AddSC_ungoro_crater();
     AddSC_winterspring();
+
+    AddSC_instance_halls_of_origination();
+    AddSC_boss_temple_guardian_anhuur();
+    AddSC_boss_earthrager_ptah();
+    AddSC_boss_anraphet();
+
+    AddSC_instance_firelands();
+    AddSC_boss_alysrazor();
 }

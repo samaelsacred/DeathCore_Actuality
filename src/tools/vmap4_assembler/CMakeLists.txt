@@ -13,14 +13,17 @@
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
-add_executable(vmap4assembler VMapAssembler.cpp)
+set(PRIVATE_SOURCES VMapAssembler.cpp)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-  set_target_properties(vmap4assembler PROPERTIES LINK_FLAGS "-framework Carbon")
+if (WIN32)
+  list(APPEND PRIVATE_SOURCES ${sources_windows})
 endif()
+
+add_executable(vmap4assembler ${PRIVATE_SOURCES})
 
 target_link_libraries(vmap4assembler
   common
+  casc
   zlib)
 
 set_target_properties(vmap4assembler

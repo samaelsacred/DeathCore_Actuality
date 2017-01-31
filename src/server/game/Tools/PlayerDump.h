@@ -18,10 +18,10 @@
 #ifndef _PLAYER_DUMP_H
 #define _PLAYER_DUMP_H
 
+#include "ObjectGuid.h"
 #include <string>
 #include <map>
 #include <set>
-#include "ObjectGuid.h"
 
 enum DumpTableType
 {
@@ -30,7 +30,10 @@ enum DumpTableType
     DTT_CHAR_TABLE,     //                                  // character_achievement, character_achievement_progress,
                                                             // character_action, character_aura, character_homebind,
                                                             // character_queststatus, character_queststatus_rewarded, character_reputation,
-                                                            // character_spell, character_spell_cooldown, character_ticket, character_talent
+                                                            // character_spell, character_spell_cooldown, character_ticket, character_talent.
+                                                            // character_cuf_profiles
+
+    DTT_CURRENCY,       //                                  // character_currency
 
     DTT_EQSET_TABLE,    // <- guid                          // character_equipmentsets
 
@@ -80,6 +83,7 @@ class TC_GAME_API PlayerDumpWriter : public PlayerDump
         DumpReturn WriteDump(std::string const& file, ObjectGuid::LowType guid);
 
     private:
+
         bool DumpTable(std::string& dump, ObjectGuid::LowType guid, char const* tableFrom, char const* tableTo, DumpTableType type);
         std::string GenerateWhereStr(char const* field, DumpGuidSet const& guids, DumpGuidSet::const_iterator& itr);
         std::string GenerateWhereStr(char const* field, ObjectGuid::LowType guid);

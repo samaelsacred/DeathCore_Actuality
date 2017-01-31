@@ -202,9 +202,6 @@ class boss_grandmaster_vorpil : public CreatureScript
                                 events.ScheduleEvent(EVENT_SUMMON_TRAVELER, 5000);
                             break;
                     }
-
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 DoMeleeAttackIfReady();

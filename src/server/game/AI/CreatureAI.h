@@ -105,6 +105,9 @@ class TC_GAME_API CreatureAI : public UnitAI
         // Trigger Creature "Alert" state (creature can see stealthed unit)
         void TriggerAlert(Unit const* who) const;
 
+        // Called in Creature::Update when deathstate = DEAD. Inherited classes may maniuplate the ability to respawn based on scripted events.
+        virtual bool CanRespawn() { return true; }
+
         // Called for reaction at stopping attack at no attackers or targets
         virtual void EnterEvadeMode(EvadeReason why = EVADE_REASON_OTHER);
 
@@ -123,6 +126,18 @@ class TC_GAME_API CreatureAI : public UnitAI
 
         virtual void SummonedCreatureDespawn(Creature* /*summon*/) { }
         virtual void SummonedCreatureDies(Creature* /*summon*/, Unit* /*killer*/) { }
+
+        // Called when the creature successfully summons a gameobject
+        virtual void JustSummonedGameobject(GameObject* /*gameobject*/) { }
+        virtual void SummonedGameobjectDespawn(GameObject* /*gameobject*/) { }
+
+        // Called when the creature successfully registers a dynamicobject
+        virtual void JustRegisteredDynObject(DynamicObject* /*dynObject*/) { }
+        virtual void JustUnregisteredDynObject(DynamicObject* /*dynObject*/) { }
+
+        // Called when the creature successfully registers an areatrigger
+        virtual void JustRegisteredAreaTrigger(AreaTrigger* /*areaTrigger*/) { }
+        virtual void JustUnregisteredAreaTrigger(AreaTrigger* /*areaTrigger*/) { }
 
         // Called when hit by a spell
         virtual void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/) { }

@@ -19,9 +19,9 @@
 #define TRINITY_GAMEEVENT_MGR_H
 
 #include "Common.h"
-#include "ObjectGuid.h"
 #include "SharedDefines.h"
 #include "Define.h"
+#include "ObjectGuid.h"
 
 #define max_ge_check_delay DAY  // 1 day in seconds
 
@@ -86,6 +86,7 @@ struct NPCVendorEntry
     int32  maxcount;                                        // 0 for infinite
     uint32 incrtime;                                        // time for restore items amount if maxcount != 0
     uint32 ExtendedCost;
+    uint8 Type;                                             // 1 item, 2 currency
 };
 
 class Player;
@@ -118,8 +119,9 @@ class TC_GAME_API GameEventMgr
         void StopEvent(uint16 event_id, bool overwrite = false);
         void HandleQuestComplete(uint32 quest_id);  // called on world event type quest completions
         void HandleWorldEventGossip(Player* player, Creature* c);
-        uint32 GetNPCFlag(Creature* cr);
+        uint64 GetNPCFlag(Creature* cr);
         uint32 GetNpcTextId(uint32 guid);
+        uint16 GetEventIdForQuest(Quest const* quest) const;
     private:
         void SendWorldStateUpdate(Player* player, uint16 event_id);
         void AddActiveEvent(uint16 event_id) { m_ActiveEvents.insert(event_id); }
@@ -155,7 +157,7 @@ class TC_GAME_API GameEventMgr
         typedef std::list<NPCVendorEntry> NPCVendorList;
         typedef std::vector<NPCVendorList> GameEventNPCVendorMap;
         typedef std::map<uint32 /*quest id*/, GameEventQuestToEventConditionNum> QuestIdToEventConditionMap;
-        typedef std::pair<ObjectGuid::LowType /*guid*/, uint32 /*npcflag*/> GuidNPCFlagPair;
+        typedef std::pair<ObjectGuid::LowType /*guid*/, uint64 /*npcflag*/> GuidNPCFlagPair;
         typedef std::list<GuidNPCFlagPair> NPCFlagList;
         typedef std::vector<NPCFlagList> GameEventNPCFlagMap;
         typedef std::vector<uint32> GameEventBitmask;
@@ -171,6 +173,7 @@ class TC_GAME_API GameEventMgr
         QuestIdToEventConditionMap mQuestToEventConditions;
         GameEventNPCFlagMap mGameEventNPCFlags;
         ActiveEvents m_ActiveEvents;
+        std::unordered_map<uint32, uint16> _questToEventLinks;
         bool isSystemInit;
     public:
         GameEventGuidMap  mGameEventCreatureGuids;

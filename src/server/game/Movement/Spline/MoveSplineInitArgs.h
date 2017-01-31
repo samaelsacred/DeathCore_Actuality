@@ -19,6 +19,7 @@
 #define TRINITYSERVER_MOVESPLINEINIT_ARGS_H
 
 #include "MoveSplineFlag.h"
+#include "ObjectGuid.h"
 #include <G3D/Vector3.h>
 
 class Unit;
@@ -27,17 +28,15 @@ namespace Movement
 {
     typedef std::vector<Vector3> PointsArray;
 
-    union FacingInfo
+    struct FacingInfo
     {
-        struct {
-            float x, y, z;
-        } f;
-        uint64  target;
-        float   angle;
+        G3D::Vector3 f;
+        ObjectGuid target;
+        float angle;
 
-        FacingInfo(float o) : angle(o) { }
-        FacingInfo(uint64 t) : target(t) { }
-        FacingInfo() { }
+        MonsterMoveType type;
+
+        FacingInfo() : angle(0.0f), type(MONSTER_MOVE_NORMAL) { }
     };
 
     struct MoveSplineInitArgs
@@ -65,7 +64,7 @@ namespace Movement
         bool Validate(Unit* unit) const;
 
     private:
-        bool _checkPathBounds() const;
+        bool _checkPathLengths() const;
     };
 }
 

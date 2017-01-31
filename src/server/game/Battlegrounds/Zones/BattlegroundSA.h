@@ -512,7 +512,7 @@ struct BattlegroundSAScore final : public BattlegroundScore
     friend class BattlegroundSA;
 
     protected:
-        BattlegroundSAScore(ObjectGuid playerGuid) : BattlegroundScore(playerGuid), DemolishersDestroyed(0), GatesDestroyed(0) { }
+        BattlegroundSAScore(ObjectGuid playerGuid, uint32 team) : BattlegroundScore(playerGuid, team), DemolishersDestroyed(0), GatesDestroyed(0) { }
 
         void UpdateScore(uint32 type, uint32 value) override
         {
@@ -530,11 +530,10 @@ struct BattlegroundSAScore final : public BattlegroundScore
             }
         }
 
-        void BuildObjectivesBlock(WorldPacket& data) final override
+        void BuildObjectivesBlock(std::vector<int32>& stats) override
         {
-            data << uint32(2); // Objectives Count
-            data << uint32(DemolishersDestroyed);
-            data << uint32(GatesDestroyed);
+            stats.push_back(DemolishersDestroyed);
+            stats.push_back(GatesDestroyed);
         }
 
         uint32 GetAttr1() const final override { return DemolishersDestroyed; }
@@ -568,7 +567,7 @@ class BattlegroundSA : public Battleground
         bool SetupBattleground() override;
         void Reset() override;
         /// Called for generate packet contain worldstate data
-        void FillInitialWorldStates(WorldPacket& data) override;
+        void FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet) override;
         /// Called when a player kill a unit in bg
         void HandleKillUnit(Creature* creature, Player* killer) override;
         /// Return the nearest graveyard where player can respawn
@@ -594,7 +593,7 @@ class BattlegroundSA : public Battleground
 
         /// Called when a player leave battleground
         void RemovePlayer(Player* player, ObjectGuid guid, uint32 team) override;
-        void HandleAreaTrigger(Player* Source, uint32 Trigger) override;
+        void HandleAreaTrigger(Player* source, uint32 trigger, bool entered) override;
 
         /* Scorekeeping */
 

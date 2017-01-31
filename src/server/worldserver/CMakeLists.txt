@@ -54,7 +54,6 @@ target_link_libraries(worldserver
   PUBLIC
     scripts
     game
-    gsoap
     readline)
 
 CollectIncludeDirectories(

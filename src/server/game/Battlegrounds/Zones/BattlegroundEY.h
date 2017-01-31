@@ -247,6 +247,12 @@ enum BG_EY_Objectives
     EY_OBJECTIVE_CAPTURE_FLAG   = 183
 };
 
+enum BG_EY_ExploitTeleportLocations
+{
+    EY_EXPLOIT_TELEPORT_LOCATION_ALLIANCE = 3773,
+    EY_EXPLOIT_TELEPORT_LOCATION_HORDE = 3772
+};
+
 struct BattlegroundEYPointIconsStruct
 {
     BattlegroundEYPointIconsStruct(uint32 _WorldStateControlIndex, uint32 _WorldStateAllianceControlledIndex, uint32 _WorldStateHordeControlledIndex)
@@ -327,7 +333,7 @@ struct BattlegroundEYScore final : public BattlegroundScore
     friend class BattlegroundEY;
 
     protected:
-        BattlegroundEYScore(ObjectGuid playerGuid) : BattlegroundScore(playerGuid), FlagCaptures(0) { }
+        BattlegroundEYScore(ObjectGuid playerGuid, uint32 team) : BattlegroundScore(playerGuid, team), FlagCaptures(0) { }
 
         void UpdateScore(uint32 type, uint32 value) override
         {
@@ -342,10 +348,9 @@ struct BattlegroundEYScore final : public BattlegroundScore
             }
         }
 
-        void BuildObjectivesBlock(WorldPacket& data) final override
+        void BuildObjectivesBlock(std::vector<int32>& stats) override
         {
-            data << uint32(1); // Objectives Count
-            data << uint32(FlagCaptures);
+            stats.push_back(FlagCaptures);
         }
 
         uint32 GetAttr1() const final override { return FlagCaptures; }
@@ -373,15 +378,16 @@ class BattlegroundEY : public Battleground
         void RespawnFlagAfterDrop();
 
         void RemovePlayer(Player* player, ObjectGuid guid, uint32 team) override;
-        void HandleAreaTrigger(Player* Source, uint32 Trigger) override;
+        void HandleAreaTrigger(Player* source, uint32 trigger, bool entered) override;
         void HandleKillPlayer(Player* player, Player* killer) override;
         WorldSafeLocsEntry const* GetClosestGraveYard(Player* player) override;
+        WorldSafeLocsEntry const* GetExploitTeleportLocation(Team team) override;
         bool SetupBattleground() override;
         void Reset() override;
         void UpdateTeamScore(uint32 Team);
         void EndBattleground(uint32 winner) override;
         bool UpdatePlayerScore(Player* player, uint32 type, uint32 value, bool doAddHonor = true) override;
-        void FillInitialWorldStates(WorldPacket& data) override;
+        void FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet) override;
         void SetDroppedFlagGUID(ObjectGuid guid, int32 /*TeamID*/ = -1) override  { m_DroppedFlagGUID = guid; }
         ObjectGuid GetDroppedFlagGUID() const { return m_DroppedFlagGUID; }
 
@@ -393,8 +399,9 @@ class BattlegroundEY : public Battleground
         bool IsAllNodesControlledByTeam(uint32 team) const override;
 
         uint32 GetPrematureWinner() override;
-    private:
+protected:
         void PostUpdateImpl(uint32 diff) override;
+        void GetPlayerPositionData(std::vector<WorldPackets::Battleground::BattlegroundPlayerPosition>* positions) const override;
 
         void EventPlayerCapturedFlag(Player* Source, uint32 BgObjectType);
         void EventTeamCapturedPoint(Player* Source, uint32 Point);
@@ -402,6 +409,7 @@ class BattlegroundEY : public Battleground
         void UpdatePointsCount(uint32 Team);
         void UpdatePointsIcons(uint32 Team, uint32 Point);
 
+    private:
         /* Point status updating procedures */
         void CheckSomeoneLeftPoint();
         void CheckSomeoneJoinedPoint();

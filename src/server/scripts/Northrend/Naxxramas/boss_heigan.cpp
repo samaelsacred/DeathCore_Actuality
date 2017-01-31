@@ -124,15 +124,15 @@ public:
             _safetyDance = true;
 
             // figure out the current GUIDs of our eruption tiles and which segment they belong in
-            std::unordered_multimap<uint32, GameObject*> const& mapGOs = me->GetMap()->GetGameObjectBySpawnIdStore();
+            std::unordered_multimap<ObjectGuid::LowType, GameObject*> const& mapGOs = me->GetMap()->GetGameObjectBySpawnIdStore();
             uint32 spawnId = firstEruptionDBGUID;
             for (uint8 section = 0; section < numSections; ++section)
             {
                 _eruptTiles[section].clear();
                 for (uint8 i = 0; i < numEruptions[section]; ++i)
                 {
-                    std::pair<std::unordered_multimap<uint32, GameObject*>::const_iterator, std::unordered_multimap<uint32, GameObject*>::const_iterator> tileIt = mapGOs.equal_range(spawnId++);
-                    for (std::unordered_multimap<uint32, GameObject*>::const_iterator it = tileIt.first; it != tileIt.second; ++it)
+                    auto tileIt = mapGOs.equal_range(spawnId++);
+                    for (auto it = tileIt.first; it != tileIt.second; ++it)
                         _eruptTiles[section].push_back(it->second->GetGUID());
                 }
             }

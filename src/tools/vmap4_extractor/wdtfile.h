@@ -18,26 +18,28 @@
 #ifndef WDTFILE_H
 #define WDTFILE_H
 
-#include "mpq_libmpq04.h"
+#include "cascfile.h"
+#include "wmo.h"
 #include <string>
+#include <vector>
+#include <cstdlib>
 
 class ADTFile;
 
 class WDTFile
 {
+private:
+    CASCFile WDT;
+    std::string filename;
 public:
     WDTFile(char* file_name, char* file_name1);
     ~WDTFile(void);
-
     bool init(char* map_id, unsigned int mapID);
-    ADTFile* GetMap(int x, int z);
 
-    std::string* gWmoInstansName;
+    std::vector<std::string> gWmoInstansName;
     int gnWMO;
 
-private:
-    MPQFile WDT;
-    std::string filename;
+    ADTFile* GetMap(int x, int z);
 };
 
 #endif

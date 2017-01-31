@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+ 
 //Basic headers
 #include "WaypointMovementGenerator.h"
 //Extended headers
@@ -40,7 +41,7 @@ void WaypointMovementGenerator<Creature>::LoadPath(Creature* creature)
     if (!i_path)
     {
         // No path id found for entry
-        TC_LOG_ERROR("sql.sql", "WaypointMovementGenerator::LoadPath: creature %s (Entry: %u GUID: %u DB GUID: %u) doesn't have waypoint path id: %u", creature->GetName().c_str(), creature->GetEntry(), creature->GetGUID().GetCounter(), creature->GetSpawnId(), path_id);
+        TC_LOG_ERROR("sql.sql", "WaypointMovementGenerator::LoadPath: creature %s (%s DB GUID: " UI64FMTD ") doesn't have waypoint path id: %u", creature->GetName().c_str(), creature->GetGUID().ToString().c_str(), creature->GetSpawnId(), path_id);
         return;
     }
 
@@ -100,7 +101,7 @@ bool WaypointMovementGenerator<Creature>::StartMove(Creature* creature)
     if (Stopped())
         return true;
 
-    bool transportPath = creature->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT) && creature->GetTransGUID();
+    bool transportPath = creature->GetTransport() != NULL;
 
     if (m_isArrivalDone)
     {
@@ -208,7 +209,7 @@ bool WaypointMovementGenerator<Creature>::DoUpdate(Creature* creature, uint32 di
     else
     {
         // Set home position at place on waypoint movement.
-        if (!creature->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT) || !creature->GetTransGUID())
+        if (!creature->GetTransGUID())
             creature->SetHomePosition(creature->GetPosition());
 
         if (creature->IsStopped())
@@ -259,11 +260,13 @@ uint32 FlightPathMovementGenerator::GetPathAtMapEnd() const
 
 bool IsNodeIncludedInShortenedPath(TaxiPathNodeEntry const* p1, TaxiPathNodeEntry const* p2)
 {
-    return p1->MapID != p2->MapID || std::pow(p1->LocX - p2->LocX, 2) + std::pow(p1->LocY - p2->LocY, 2) > SKIP_SPLINE_POINT_DISTANCE_SQ;
+    return p1->MapID != p2->MapID || std::pow(p1->Loc.X - p2->Loc.X, 2) + std::pow(p1->Loc.Y - p2->Loc.Y, 2) > SKIP_SPLINE_POINT_DISTANCE_SQ;
 }
 
-void FlightPathMovementGenerator::LoadPath(Player* player)
+void FlightPathMovementGenerator::LoadPath(Player* player, uint32 startNode /*= 0*/)
 {
+    i_path.clear();
+    i_currentNode = startNode;
     _pointsForPathSwitch.clear();
     std::deque<uint32> const& taxi = player->m_taxi.GetPath();
     for (uint32 src = 0, dst = 1; dst < taxi.size(); src = dst++)
@@ -281,7 +284,7 @@ void FlightPathMovementGenerator::LoadPath(Player* player)
             bool passedPreviousSegmentProximityCheck = false;
             for (uint32 i = 0; i < nodes.size(); ++i)
             {
-                if (passedPreviousSegmentProximityCheck || !src || i_path.empty() || IsNodeIncludedInShortenedPath(i_path[i_path.size() - 1], nodes[i]))
+                if (passedPreviousSegmentProximityCheck || !src || i_path.empty() || IsNodeIncludedInShortenedPath(i_path.back(), nodes[i]))
                 {
                     if ((!src || (IsNodeIncludedInShortenedPath(start, nodes[i]) && i >= 2)) &&
                         (dst == taxi.size() - 1 || (IsNodeIncludedInShortenedPath(end, nodes[i]) && i < nodes.size() - 1)))
@@ -328,7 +331,7 @@ void FlightPathMovementGenerator::DoFinalize(Player* player)
     player->RemoveFlag(PLAYER_FLAGS, PLAYER_FLAGS_TAXI_BENCHMARK);
 }
 
-#define PLAYER_FLIGHT_SPEED 32.0f
+#define PLAYER_FLIGHT_SPEED 30.0f
 
 void FlightPathMovementGenerator::DoReset(Player* player)
 {
@@ -340,11 +343,14 @@ void FlightPathMovementGenerator::DoReset(Player* player)
     uint32 end = GetPathAtMapEnd();
     for (uint32 i = GetCurrentNode(); i != end; ++i)
     {
-        G3D::Vector3 vertice(i_path[i]->LocX, i_path[i]->LocY, i_path[i]->LocZ);
+        G3D::Vector3 vertice(i_path[i]->Loc.X, i_path[i]->Loc.Y, i_path[i]->Loc.Z);
         init.Path().push_back(vertice);
     }
     init.SetFirstPointId(GetCurrentNode());
     init.SetFly();
+    init.SetSmooth();
+    init.SetUncompressed();
+    init.SetWalk(true);
     init.SetVelocity(PLAYER_FLIGHT_SPEED);
     init.Launch();
 }
@@ -364,7 +370,7 @@ bool FlightPathMovementGenerator::DoUpdate(Player* player, uint32 /*diff*/)
                 player->m_taxi.NextTaxiDestination();
                 if (!_pointsForPathSwitch.empty())
                 {
-                    player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_GOLD_SPENT_FOR_TRAVELLING, _pointsForPathSwitch.front().Cost);
+                    player->UpdateCriteria(CRITERIA_TYPE_GOLD_SPENT_FOR_TRAVELLING, _pointsForPathSwitch.front().Cost);
                     player->ModifyMoney(-_pointsForPathSwitch.front().Cost);
                 }
             }
@@ -411,9 +417,9 @@ void FlightPathMovementGenerator::DoEventIfAny(Player* player, TaxiPathNodeEntry
 bool FlightPathMovementGenerator::GetResetPos(Player*, float& x, float& y, float& z)
 {
     TaxiPathNodeEntry const* node = i_path[i_currentNode];
-    x = node->LocX;
-    y = node->LocY;
-    z = node->LocZ;
+    x = node->Loc.X;
+    y = node->Loc.Y;
+    z = node->Loc.Z;
     return true;
 }
 
@@ -424,8 +430,8 @@ void FlightPathMovementGenerator::InitEndGridInfo()
     uint32 nodeCount = i_path.size();        //! Number of nodes in path.
     _endMapId = i_path[nodeCount - 1]->MapID; //! MapId of last node
     _preloadTargetNode = nodeCount - 3;
-    _endGridX = i_path[nodeCount - 1]->LocX;
-    _endGridY = i_path[nodeCount - 1]->LocY;
+    _endGridX = i_path[nodeCount - 1]->Loc.X;
+    _endGridY = i_path[nodeCount - 1]->Loc.Y;
 }
 
 void FlightPathMovementGenerator::PreloadEndGrid()

@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
+add_subdirectory(connection_patcher)
+add_subdirectory(extractor_common)
 add_subdirectory(map_extractor)
 add_subdirectory(vmap4_assembler)
 add_subdirectory(vmap4_extractor)

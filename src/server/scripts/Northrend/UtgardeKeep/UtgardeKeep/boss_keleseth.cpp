@@ -213,9 +213,6 @@ class boss_keleseth : public CreatureScript
                         default:
                             break;
                     }
-
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 DoMeleeAttackIfReady();
@@ -313,9 +310,6 @@ class npc_vrykul_skeleton : public CreatureScript
                         default:
                             break;
                     }
-
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 if (!me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
@@ -361,7 +355,6 @@ class spell_frost_tomb : public SpellScriptLoader
             return new spell_frost_tomb_AuraScript();
         }
 };
-
 
 class achievement_on_the_rocks : public AchievementCriteriaScript
 {

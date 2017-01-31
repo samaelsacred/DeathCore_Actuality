@@ -349,7 +349,7 @@ class npc_jaina_or_sylvanas_intro_hor : public CreatureScript
             if (InstanceScript* instance = creature->GetInstanceScript())
                 if (instance->GetData(DATA_QUEL_DELAR_EVENT) == IN_PROGRESS || instance->GetData(DATA_QUEL_DELAR_EVENT) == SPECIAL)
                 {
-                    ClearGossipMenuFor(player);
+                    player->PlayerTalkClass->ClearMenus();
                     return true;
                 }
 
@@ -366,7 +366,7 @@ class npc_jaina_or_sylvanas_intro_hor : public CreatureScript
 
             void sGossipSelect(Player* player, uint32 /*menuId*/, uint32 gossipListId) override
             {
-                ClearGossipMenuFor(player);
+                player->PlayerTalkClass->ClearMenus();
 
                 switch (gossipListId)
                 {
@@ -649,7 +649,7 @@ class npc_jaina_or_sylvanas_intro_hor : public CreatureScript
                         if (Creature* lichking = ObjectAccessor::GetCreature(*me, _lichkingGUID))
                         {
                             if (GameObject* frostmourne = ObjectAccessor::GetGameObject(*me, _instance->GetGuidData(DATA_FROSTMOURNE)))
-                                frostmourne->SetPhaseMask(2, true);
+                                frostmourne->SetLootState(GO_JUST_DEACTIVATED);
                             lichking->CastSpell(lichking, SPELL_TAKE_FROSTMOURNE, true);
                             lichking->CastSpell(lichking, SPELL_FROSTMOURNE_VISUAL, true);
                         }
@@ -815,7 +815,7 @@ class npc_jaina_or_sylvanas_escape_hor : public CreatureScript
                 _events.Reset();
                 _icewall = 0;
                 _events.ScheduleEvent(EVENT_ESCAPE, 1000);
-                _instance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_NOT_RETREATING_EVENT);
+                _instance->DoStopCriteriaTimer(CRITERIA_TIMED_TYPE_EVENT, ACHIEV_NOT_RETREATING_EVENT);
             }
 
             void JustDied(Unit* /*killer*/) override
@@ -860,7 +860,7 @@ class npc_jaina_or_sylvanas_escape_hor : public CreatureScript
 
             void sGossipSelect(Player* player, uint32 /*menuId*/, uint32 gossipListId) override
             {
-                ClearGossipMenuFor(player);
+                player->PlayerTalkClass->ClearMenus();
 
                 switch (gossipListId)
                 {
@@ -1053,7 +1053,7 @@ class npc_jaina_or_sylvanas_escape_hor : public CreatureScript
                                 }
                             }
                             _invincibility = false;
-                            _instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_NOT_RETREATING_EVENT);
+                            _instance->DoStartCriteriaTimer(CRITERIA_TIMED_TYPE_EVENT, ACHIEV_NOT_RETREATING_EVENT);
                             _events.ScheduleEvent(EVENT_ESCAPE_7, 1000);
                             break;
                         case EVENT_ESCAPE_7:
@@ -1113,7 +1113,7 @@ class npc_jaina_or_sylvanas_escape_hor : public CreatureScript
                             me->RemoveAurasDueToSpell(SPELL_HARVEST_SOUL);
                             if (_instance->GetData(DATA_TEAM_IN_INSTANCE) == ALLIANCE)
                                 Talk(SAY_JAINA_ESCAPE_9);
-                            if (Transport* gunship = ObjectAccessor::GetTransport(*me, _instance->GetGuidData(DATA_GUNSHIP)))
+                            if (Transport* gunship = ObjectAccessor::GetTransportOnMap(*me, _instance->GetGuidData(DATA_GUNSHIP)))
                                 gunship->EnableMovement(true);
                             _instance->SetBossState(DATA_THE_LICH_KING_ESCAPE, DONE);
                             break;
@@ -1185,7 +1185,7 @@ class npc_the_lich_king_escape_hor : public CreatureScript
                             if (Creature* target = ObjectAccessor::GetCreature(*me, _instance->GetGuidData(DATA_ESCAPE_LEADER)))
                                 DoCast(target, SPELL_HARVEST_SOUL);
 
-                            if (Transport* gunship = ObjectAccessor::GetTransport(*me, _instance->GetGuidData(DATA_GUNSHIP)))
+                            if (Transport* gunship = ObjectAccessor::GetTransportOnMap(*me, _instance->GetGuidData(DATA_GUNSHIP)))
                                 gunship->EnableMovement(true);
                             break;
                         default:
@@ -2004,7 +2004,7 @@ class at_hor_intro_start : public AreaTriggerScript
     public:
         at_hor_intro_start() : AreaTriggerScript("at_hor_intro_start") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/) override
+        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/, bool /*entered*/) override
         {
             if (player->IsGameMaster())
                 return true;
@@ -2030,7 +2030,7 @@ class at_hor_waves_restarter : public AreaTriggerScript
     public:
         at_hor_waves_restarter() : AreaTriggerScript("at_hor_waves_restarter") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/) override
+        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/, bool /*entered*/) override
         {
             if (player->IsGameMaster())
                 return true;
@@ -2065,7 +2065,7 @@ class at_hor_impenetrable_door : public AreaTriggerScript
     public:
         at_hor_impenetrable_door() : AreaTriggerScript("at_hor_impenetrable_door") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* /*at*/) override
+        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/, bool /*entered*/) override
         {
             if (player->IsGameMaster())
                 return true;
@@ -2085,7 +2085,7 @@ class at_hor_shadow_throne : public AreaTriggerScript
     public:
         at_hor_shadow_throne() : AreaTriggerScript("at_hor_shadow_throne") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* /*at*/) override
+        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/, bool /*entered*/) override
         {
             if (player->IsGameMaster())
                 return true;
@@ -2707,7 +2707,7 @@ class at_hor_uther_quel_delar_start : public AreaTriggerScript
     public:
         at_hor_uther_quel_delar_start() : AreaTriggerScript("at_hor_uther_quel_delar_start") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/) override
+        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/, bool /*entered*/) override
         {
             if (player->IsGameMaster())
                 return true;
@@ -2782,7 +2782,7 @@ class spell_hor_evasion : public SpellScriptLoader
                     return;
 
                 float angle = pos.GetAngle(&home);
-                float dist = GetSpellInfo()->Effects[EFFECT_0].CalcRadius(GetCaster());
+                float dist = GetSpellInfo()->GetEffect(EFFECT_0)->CalcRadius(GetCaster());
                 target->MovePosition(pos, dist, angle);
 
                 dest.Relocate(pos);

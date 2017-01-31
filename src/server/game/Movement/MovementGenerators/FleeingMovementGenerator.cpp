@@ -37,7 +37,7 @@ void FleeingMovementGenerator<T>::_setTargetLocation(T* owner)
     if (owner->HasUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED))
         return;
 
-    if (owner->IsMovementPreventedByCasting())
+    if (owner->HasUnitState(UNIT_STATE_CASTING) && !owner->CanMoveDuringChannel())
     {
         owner->CastStop();
         return;
@@ -54,8 +54,7 @@ void FleeingMovementGenerator<T>::_setTargetLocation(T* owner)
                                                                                 mypos.m_positionX,
                                                                                 mypos.m_positionY,
                                                                                 mypos.m_positionZ + 2.0f,
-                                                                                x, y, z + 2.0f,
-                                                                                VMAP::ModelIgnoreFlags::Nothing);
+                                                                                x, y, z + 2.0f);
     if (!isInLOS)
     {
         i_nextCheckTime.Reset(200);

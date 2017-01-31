@@ -97,7 +97,6 @@ ObjectData const objectData[] =
     { GO_NAXX_PORTAL_CONSTRUCT, DATA_NAXX_PORTAL_CONSTRUCT },
     { GO_NAXX_PORTAL_PLAGUE,    DATA_NAXX_PORTAL_PLAGUE    },
     { GO_NAXX_PORTAL_MILITARY,  DATA_NAXX_PORTAL_MILITARY  },
-    { GO_KELTHUZAD_THRONE,      DATA_KELTHUZAD_THRONE      },
     { 0,                        0,                         }
 };
 
@@ -116,6 +115,7 @@ class instance_naxxramas : public InstanceMapScript
                 LoadDoorData(doorData);
                 LoadObjectData(nullptr, objectData);
 
+                AbominationCount        = 0;
                 hadAnubRekhanGreet      = false;
                 hadFaerlinaGreet        = false;
                 hadThaddiusGreet        = false;
@@ -230,10 +230,6 @@ class instance_naxxramas : public InstanceMapScript
                         if (GetBossState(BOSS_HORSEMEN) == DONE)
                             go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                         break;
-                    case GO_KELTHUZAD_THRONE:
-                        if (GetBossState(BOSS_KELTHUZAD) == DONE)
-                            go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                        break;
                     case GO_BIRTH:
                         if (hadSapphironBirth || GetBossState(BOSS_SAPPHIRON) == DONE)
                         {
@@ -274,6 +270,9 @@ class instance_naxxramas : public InstanceMapScript
                         if (GameObject* gate = instance->GetGameObject(GothikGateGUID))
                             gate->SetGoState(GOState(value));
                         break;
+                    case DATA_ABOMINATION_KILLED:
+                        AbominationCount = value;
+                        break;
                     case DATA_HAD_ANUBREKHAN_GREET:
                         hadAnubRekhanGreet = (value == 1u);
                         break;
@@ -295,6 +294,8 @@ class instance_naxxramas : public InstanceMapScript
             {
                 switch (id)
                 {
+                    case DATA_ABOMINATION_KILLED:
+                        return AbominationCount;
                     case DATA_HAD_ANUBREKHAN_GREET:
                         return hadAnubRekhanGreet ? 1u : 0u;
                     case DATA_HAD_FAERLINA_GREET:
@@ -417,12 +418,6 @@ class instance_naxxramas : public InstanceMapScript
                     case BOSS_SAPPHIRON:
                         if (state == DONE)
                             events.ScheduleEvent(EVENT_DIALOGUE_SAPPHIRON_KELTHUZAD, Seconds(6));
-                        HandleGameObject(KelthuzadDoorGUID, false);
-                        break;
-                    case BOSS_KELTHUZAD:
-                        if (state == DONE)
-                            if (GameObject* throne = GetGameObject(DATA_KELTHUZAD_THRONE))
-                                throne->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                         break;
                     default:
                         break;
@@ -498,6 +493,7 @@ class instance_naxxramas : public InstanceMapScript
                         case EVENT_DIALOGUE_SAPPHIRON_KELTHUZAD:
                             if (Creature* kelthuzad = instance->GetCreature(KelthuzadGUID))
                                 kelthuzad->AI()->Talk(SAY_DIALOGUE_SAPPHIRON_KELTHUZAD);
+                            HandleGameObject(KelthuzadDoorGUID, false);
                             events.ScheduleEvent(EVENT_DIALOGUE_SAPPHIRON_LICHKING, Seconds(6));
                             break;
                         case EVENT_DIALOGUE_SAPPHIRON_LICHKING:
@@ -553,8 +549,6 @@ class instance_naxxramas : public InstanceMapScript
                     // And They Would All Go Down Together (kill 4HM within 15sec of each other)
                     case 7600: // 25-man
                     case 7601: // 10-man
-                        if (criteria_id + instance->GetSpawnMode() == 7601)
-                            return false;
                         if (Creature* baron = instance->GetCreature(BaronGUID)) // it doesn't matter which one we use, really
                             return (baron->AI()->GetData(DATA_HORSEMEN_CHECK_ACHIEVEMENT_CREDIT) == 1u);
                         return false;
@@ -620,6 +614,7 @@ class instance_naxxramas : public InstanceMapScript
             ObjectGuid PortalsGUID[4];
             ObjectGuid KelthuzadDoorGUID;
             ObjectGuid LichKingGUID;
+            uint8 AbominationCount;
             bool hadAnubRekhanGreet;
             bool hadFaerlinaGreet;
             bool hadThaddiusGreet;

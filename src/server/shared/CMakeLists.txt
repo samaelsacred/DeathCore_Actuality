@@ -47,7 +47,11 @@ target_include_directories(shared
 
 target_link_libraries(shared
   PUBLIC
-    database)
+    database
+    rapidjson
+    proto
+    zlib
+    gsoap)
 
 set_target_properties(shared
     PROPERTIES

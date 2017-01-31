@@ -210,7 +210,7 @@ public:
 
             for (uint8 i = 0; i < 4; ++i)
             {
-                if (ShieldGeneratorChannel[i])
+                if (!ShieldGeneratorChannel[i].IsEmpty())
                 {
                     if (Unit* remo = ObjectAccessor::GetUnit(*me, ShieldGeneratorChannel[i]))
                     {
@@ -884,7 +884,7 @@ class item_tainted_core : public ItemScript
 public:
     item_tainted_core() : ItemScript("item_tainted_core") { }
 
-    bool OnUse(Player* player, Item* /*item*/, SpellCastTargets const& targets) override
+    bool OnUse(Player* player, Item* /*item*/, SpellCastTargets const& targets, ObjectGuid /*castId*/) override
     {
         InstanceScript* instance = player->GetInstanceScript();
         if (!instance)

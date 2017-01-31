@@ -98,7 +98,7 @@ class OPvPCapturePointHP : public OPvPCapturePoint
 
         void ChangeState() override;
 
-        void FillInitialWorldStates(WorldPacket & data) override;
+        void FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet) override;
 
     private:
         OutdoorPvPHPTowerType m_TowerType;
@@ -116,7 +116,7 @@ class OutdoorPvPHP : public OutdoorPvP
 
         bool Update(uint32 diff) override;
 
-        void FillInitialWorldStates(WorldPacket &data) override;
+        void FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet) override;
 
         void SendRemoveWorldStates(Player* player) override;
 

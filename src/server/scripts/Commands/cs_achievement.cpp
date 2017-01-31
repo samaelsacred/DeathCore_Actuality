@@ -55,7 +55,7 @@ public:
         if (!achievementId)
         {
             if (char* id = handler->extractKeyFromLink((char*)args, "Hachievement"))
-                achievementId = atoul(id);
+                achievementId = atoi(id);
             if (!achievementId)
                 return false;
         }
@@ -68,7 +68,7 @@ public:
             return false;
         }
 
-        if (AchievementEntry const* achievementEntry = sAchievementMgr->GetAchievement(achievementId))
+        if (AchievementEntry const* achievementEntry = sAchievementStore.LookupEntry(achievementId))
             target->CompletedAchievement(achievementEntry);
 
         return true;

@@ -131,9 +131,6 @@ public:
                         events.ScheduleEvent(EVENT_KNOCK_AWAY, 14 * IN_MILLISECONDS);
                         break;
                 }
-
-                if (me->HasUnitState(UNIT_STATE_CASTING))
-                    return;
             }
             DoMeleeAttackIfReady();
         }

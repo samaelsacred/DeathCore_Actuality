@@ -20,7 +20,7 @@
 
 #include <G3D/Quat.h>
 #include "Spline.h"
-#include "DBCStores.h"
+#include "DB2Stores.h"
 #include "ObjectGuid.h"
 
 struct KeyFrame;
@@ -62,7 +62,7 @@ struct KeyFrame
     uint32 NextArriveTime;
 
     bool IsTeleportFrame() const { return Teleport; }
-    bool IsStopFrame() const { return Node->Flags == 2; }
+    bool IsStopFrame() const { return (Node->Flags & TAXI_PATH_NODE_FLAG_STOP) != 0; }
 };
 
 struct TransportTemplate
@@ -98,7 +98,7 @@ typedef std::map<uint32, TransportAnimation> TransportAnimationContainer;
 
 class TC_GAME_API TransportMgr
 {
-        friend TC_GAME_API void LoadDBCStores(std::string const&);
+        friend void DB2Manager::LoadStores(std::string const&, uint32);
 
     public:
         static TransportMgr* instance();
@@ -108,7 +108,7 @@ class TC_GAME_API TransportMgr
         void LoadTransportTemplates();
 
         // Creates a transport using given GameObject template entry
-        Transport* CreateTransport(uint32 entry, ObjectGuid::LowType guid = 0, Map* map = NULL);
+        Transport* CreateTransport(uint32 entry, ObjectGuid::LowType guid = UI64LIT(0), Map* map = nullptr, uint32 phaseid = 0, uint32 phasegroup = 0);
 
         // Spawns all continent transports, used at core startup
         void SpawnContinentTransports();

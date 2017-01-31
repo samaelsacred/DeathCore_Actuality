@@ -154,9 +154,6 @@ public:
                         events.ScheduleEvent(EVENT_CONFLAGRATION, 30000);
                         break;
                 }
-
-                if (me->HasUnitState(UNIT_STATE_CASTING))
-                    return;
             }
             DoMeleeAttackIfReady();
         }

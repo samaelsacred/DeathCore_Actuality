@@ -107,9 +107,6 @@ class boss_zereketh_the_unbound : public CreatureScript
                         default:
                             break;
                     }
-
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 DoMeleeAttackIfReady();

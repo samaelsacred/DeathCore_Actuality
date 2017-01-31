@@ -237,9 +237,9 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                                 state = IN_PROGRESS;
                                 break;
                             case DONE:
-                                DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_DEFEAT_FACTION_CHAMPIONS);
+                                DoUpdateCriteria(CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_DEFEAT_FACTION_CHAMPIONS);
                                 if (ResilienceWillFixItTimer > 0)
-                                    DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_CHAMPIONS_KILLED_IN_MINUTE);
+                                    DoUpdateCriteria(CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_CHAMPIONS_KILLED_IN_MINUTE);
                                 DoRespawnGameObject(CrusadersCacheGUID, 7*DAY);
                                 if (GameObject* cache = instance->GetGameObject(CrusadersCacheGUID))
                                     cache->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
@@ -276,7 +276,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                             {
                                 EventStage = 6000;
                                 uint32 tributeChest = 0;
-                                if (instance->GetSpawnMode() == RAID_DIFFICULTY_10MAN_HEROIC)
+                                if (instance->GetSpawnMode() == DIFFICULTY_10_HC)
                                 {
                                     if (TrialCounter >= 50)
                                         tributeChest = GO_TRIBUTE_CHEST_10H_99;
@@ -293,7 +293,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                                         }
                                     }
                                 }
-                                else if (instance->GetSpawnMode() == RAID_DIFFICULTY_25MAN_HEROIC)
+                                else if (instance->GetSpawnMode() == DIFFICULTY_25_HC)
                                 {
                                     if (TrialCounter >= 50)
                                         tributeChest = GO_TRIBUTE_CHEST_25H_99;
@@ -313,7 +313,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
 
                                 if (tributeChest)
                                     if (Creature* tirion =  instance->GetCreature(TirionGUID))
-                                        if (GameObject* chest = tirion->SummonGameObject(tributeChest, 805.62f, 134.87f, 142.16f, 3.27f, G3D::Quat(), WEEK))
+                                        if (GameObject* chest = tirion->SummonGameObject(tributeChest, 805.62f, 134.87f, 142.16f, 3.27f, 0, 0, 0, 0, WEEK))
                                             chest->SetRespawnTime(chest->GetRespawnDelay());
                                 break;
                             }
@@ -407,7 +407,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                                 break;
                             case SNAKES_DONE:
                                 if (NotOneButTwoJormungarsTimer > 0)
-                                    DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_WORMS_KILLED_IN_10_SECONDS);
+                                    DoUpdateCriteria(CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_WORMS_KILLED_IN_10_SECONDS);
                                 EventStage = 300;
                                 SetData(TYPE_NORTHREND_BEASTS, IN_PROGRESS);
                                 break;

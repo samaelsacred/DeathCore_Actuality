@@ -54,7 +54,7 @@ class TC_GAME_API Corpse : public WorldObject, public GridObject<Corpse>
         void AddToWorld() override;
         void RemoveFromWorld() override;
 
-        bool Create(ObjectGuid::LowType guidlow);
+        bool Create(ObjectGuid::LowType guidlow, Map* map);
         bool Create(ObjectGuid::LowType guidlow, Player* owner);
 
         void SaveToDB();

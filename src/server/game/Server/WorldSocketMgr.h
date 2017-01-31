@@ -34,6 +34,8 @@ class TC_GAME_API WorldSocketMgr : public SocketMgr<WorldSocket>
     typedef SocketMgr<WorldSocket> BaseSocketMgr;
 
 public:
+    ~WorldSocketMgr();
+
     static WorldSocketMgr& Instance();
 
     /// Start network, listen at address:port .
@@ -50,6 +52,7 @@ protected:
     NetworkThread<WorldSocket>* CreateThreads() const override;
 
 private:
+    AsyncAcceptor* _instanceAcceptor;
     int32 _socketSendBufferSize;
     int32 m_SockOutUBuff;
     bool _tcpNoDelay;

@@ -1,13 +1,26 @@
-/* Copyright (C) 2009 - 2010 by /dev/rsa for 2 <https://2.svn.sourceforge.net/>
- * This program is free software licensed under GPL version 2
- * Please see the included DOCS/LICENSE.TXT for more information */
+/*
+ * Copyright (C) 2016-2017 DeathCore <http://www.noffearrdeathproject.org/>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef DEF_CRUSADER_H
 #define DEF_CRUSADER_H
 
 #define DataHeader "TCR"
 
-enum DataTypes
+enum TCRDataTypes
 {
     BOSS_BEASTS                 = 0,
     BOSS_JARAXXUS               = 1,
@@ -31,7 +44,7 @@ enum DataTypes
     DECREASE                    = 502,
 };
 
-enum SpellIds
+enum TCRSpellIds
 {
     SPELL_WILFRED_PORTAL        = 68424,
     SPELL_JARAXXUS_CHAINS       = 67924,
@@ -39,7 +52,7 @@ enum SpellIds
     SPELL_DESTROY_FLOOR_KNOCKUP = 68193,
 };
 
-enum MiscData
+enum TCRMiscData
 {
     DESPAWN_TIME                = 1200000
 };
@@ -140,12 +153,12 @@ const Position AnubarakLoc[]=
 
 const Position EndSpawnLoc[]=
 {
-    {648.9167f, 131.0208f, 141.6161f, 0.f}, // 0 - Highlord Tirion Fordring
-    {649.1614f, 142.0399f, 141.3057f, 0.f}, // 1 - Argent Mage
-    {644.6250f, 149.2743f, 140.6015f, 5.f}  // 2 - Portal to Dalaran
+    {648.9167f, 131.0208f, 141.6161f, 0}, // 0 - Highlord Tirion Fordring
+    {649.1614f, 142.0399f, 141.3057f, 0}, // 1 - Argent Mage
+    {644.6250f, 149.2743f, 140.6015f, 0}  // 2 - Portal to Dalaran
 };
 
-enum WorldStateIds
+enum TCRWorldStateIds
 {
     UPDATE_STATE_UI_SHOW            = 4390,
     UPDATE_STATE_UI_COUNT           = 4389
@@ -174,7 +187,7 @@ enum AnnouncerMessages
     MSG_ANUBARAK               = 724006
 };
 
-enum CreatureIds
+enum TCRCreatureIds
 {
     NPC_BARRENT                 = 34816,
     NPC_TIRION                  = 34996,
@@ -238,7 +251,7 @@ enum CreatureIds
     NPC_ANUBARAK                        = 34564
 };
 
-enum GameObjectIds
+enum TCRGameObjectIds
 {
     GO_CRUSADERS_CACHE_10       = 195631,
     GO_CRUSADERS_CACHE_25       = 195632,
@@ -264,7 +277,7 @@ enum GameObjectIds
     GO_PORTAL_TO_DALARAN        = 195682
 };
 
-enum AchievementData
+enum TCRAchievementData
 {
     // Northrend Beasts
     UPPER_BACK_PAIN_10_PLAYER               = 11779,

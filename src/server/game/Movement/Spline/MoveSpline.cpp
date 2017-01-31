@@ -1,18 +1,18 @@
 /*
+ * Copyright (C) 2016-2017 DeathCore <http://www.noffearrdeathproject.org/>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "MoveSpline.h"
@@ -42,17 +42,17 @@ Location MoveSpline::ComputePosition() const
     else if (splineflags.falling)
         computeFallElevation(c.z);
 
-    if (splineflags.done && splineflags.isFacing())
+    if (splineflags.done && facing.type != MONSTER_MOVE_NORMAL)
     {
-        if (splineflags.final_angle)
+        if (facing.type == MONSTER_MOVE_FACING_ANGLE)
             c.orientation = facing.angle;
-        else if (splineflags.final_point)
+        else if (facing.type == MONSTER_MOVE_FACING_SPOT)
             c.orientation = std::atan2(facing.f.y - c.y, facing.f.x - c.x);
         //nothing to do for MoveSplineFlag::Final_Target flag
     }
     else
     {
-        if (!splineflags.hasFlag(MoveSplineFlag::OrientationFixed | MoveSplineFlag::Falling))
+        if (!splineflags.hasFlag(MoveSplineFlag::OrientationFixed | MoveSplineFlag::Falling | MoveSplineFlag::Unknown0))
         {
             Vector3 hermite;
             spline.evaluate_derivative(point_Idx, u, hermite);
@@ -147,7 +147,7 @@ void MoveSpline::init_spline(const MoveSplineInitArgs& args)
     /// @todo what to do in such cases? problem is in input data (all points are at same coords)
     if (spline.length() < minimal_duration)
     {
-        TC_LOG_DEBUG("misc", "MoveSpline::init_spline: zero length spline, wrong input data?");
+        TC_LOG_ERROR("misc", "MoveSpline::init_spline: zero length spline, wrong input data?");
         spline.set_length(spline.last(), spline.isCyclic() ? 1000 : 1);
     }
     point_Idx = spline.first();
@@ -164,6 +164,7 @@ void MoveSpline::Initialize(MoveSplineInitArgs const& args)
     time_passed = 0;
     vertical_acceleration = 0.f;
     effect_start_time = 0;
+    splineIsFacingOnly = args.path.size() == 2 && args.facing.type != MONSTER_MOVE_NORMAL && ((args.path[1] - args.path[0]).length() < 0.1f);
 
     // Check if its a stop spline
     if (args.flags.done)
@@ -176,7 +177,7 @@ void MoveSpline::Initialize(MoveSplineInitArgs const& args)
 
     // init parabolic / animation
     // spline initialized, duration known and i able to compute parabolic acceleration
-    if (args.flags & (MoveSplineFlag::Parabolic | MoveSplineFlag::Animation))
+    if (args.flags & (MoveSplineFlag::Parabolic | MoveSplineFlag::Animation | MoveSplineFlag::Unknown6))
     {
         effect_start_time = Duration() * args.time_perc;
         if (args.flags.parabolic && effect_start_time < Duration())
@@ -189,7 +190,7 @@ void MoveSpline::Initialize(MoveSplineInitArgs const& args)
 
 MoveSpline::MoveSpline() : m_Id(0), time_passed(0),
     vertical_acceleration(0.f), initialOrientation(0.f), effect_start_time(0), point_Idx(0), point_Idx_offset(0),
-    onTransport(false)
+    onTransport(false), splineIsFacingOnly(false)
 {
     splineflags.done = true;
 }
@@ -201,38 +202,24 @@ bool MoveSplineInitArgs::Validate(Unit* unit) const
 #define CHECK(exp) \
     if (!(exp))\
     {\
-        TC_LOG_ERROR("misc.movesplineinitargs", "MoveSplineInitArgs::Validate: expression '%s' failed for GUID: %u Entry: %u", #exp, unit->GetTypeId() == TYPEID_PLAYER ? unit->GetGUID().GetCounter() : unit->ToCreature()->GetSpawnId(), unit->GetEntry());\
+        TC_LOG_ERROR("misc", "MoveSplineInitArgs::Validate: expression '%s' failed for %s Entry: %u", #exp, unit->GetGUID().ToString().c_str(), unit->GetEntry());\
         return false;\
     }
     CHECK(path.size() > 1);
-    CHECK(velocity > 0.01f);
+    CHECK(velocity > 0.1f);
     CHECK(time_perc >= 0.f && time_perc <= 1.f);
-    //CHECK(_checkPathBounds());
+    CHECK(_checkPathLengths());
     return true;
 #undef CHECK
 }
 
-// MONSTER_MOVE packet format limitation for not CatmullRom movement:
-// each vertex offset packed into 11 bytes
-bool MoveSplineInitArgs::_checkPathBounds() const
+// check path lengths - why are we even starting such short movement?
+bool MoveSplineInitArgs::_checkPathLengths() const
 {
-    if (!(flags & MoveSplineFlag::Mask_CatmullRom) && path.size() > 2)
-    {
-        enum{
-            MAX_OFFSET = (1 << 11) / 2
-        };
-        Vector3 middle = (path.front()+path.back()) / 2;
-        Vector3 offset;
-        for (uint32 i = 1; i < path.size()-1; ++i)
-        {
-            offset = path[i] - middle;
-            if (std::fabs(offset.x) >= MAX_OFFSET || std::fabs(offset.y) >= MAX_OFFSET || std::fabs(offset.z) >= MAX_OFFSET)
-            {
-                TC_LOG_ERROR("misc", "MoveSplineInitArgs::_checkPathBounds check failed");
+    if (path.size() > 2 || facing.type == MONSTER_MOVE_NORMAL)
+        for (uint32 i = 0; i < path.size() - 1; ++i)
+            if ((path[i + 1] - path[i]).length() < 0.1f)
                 return false;
-            }
-        }
-    }
     return true;
 }
 
@@ -286,11 +273,11 @@ std::string MoveSpline::ToString() const
     str << "MoveSpline" << std::endl;
     str << "spline Id: " << GetId() << std::endl;
     str << "flags: " << splineflags.ToString() << std::endl;
-    if (splineflags.final_angle)
+    if (facing.type == MONSTER_MOVE_FACING_ANGLE)
         str << "facing  angle: " << facing.angle;
-    else if (splineflags.final_target)
-        str << "facing target: " << facing.target;
-    else if (splineflags.final_point)
+    else if (facing.type == MONSTER_MOVE_FACING_TARGET)
+        str << "facing target: " << facing.target.ToString();
+    else if (facing.type == MONSTER_MOVE_FACING_SPOT)
         str << "facing  point: " << facing.f.x << " " << facing.f.y << " " << facing.f.z;
     str << std::endl;
     str << "time passed: " << time_passed << std::endl;

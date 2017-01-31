@@ -131,9 +131,9 @@ bool GrandChampionsOutVehicle(Creature* me)
 
     if (pGrandChampion1 && pGrandChampion2 && pGrandChampion3)
     {
-        if (!pGrandChampion1->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT) &&
-            !pGrandChampion2->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT) &&
-            !pGrandChampion3->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
+        if (!pGrandChampion1->m_movementInfo.transport.guid &&
+            !pGrandChampion2->m_movementInfo.transport.guid &&
+            !pGrandChampion3->m_movementInfo.transport.guid)
             return true;
     }
 
@@ -393,7 +393,7 @@ public:
                 }
             }else uiPhaseTimer -= uiDiff;
 
-            if (!UpdateVictim() || me->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
+            if (!UpdateVictim() || !me->m_movementInfo.transport.guid.IsEmpty())
                 return;
 
             if (uiInterceptTimer <= uiDiff)
@@ -541,7 +541,7 @@ public:
                 uiFireBallTimer = 5000;
             } else uiFireBallTimer -= uiDiff;
 
-            if (!UpdateVictim() || me->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
+            if (!UpdateVictim() || !me->m_movementInfo.transport.guid.IsEmpty())
                 return;
 
             if (uiFireBallTimer <= uiDiff)
@@ -683,7 +683,7 @@ public:
                 }
             }else uiPhaseTimer -= uiDiff;
 
-            if (!UpdateVictim() || me->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
+            if (!UpdateVictim() || !me->m_movementInfo.transport.guid.IsEmpty())
                 return;
 
             if (uiChainLightningTimer <= uiDiff)
@@ -833,7 +833,7 @@ public:
                 }
             }else uiPhaseTimer -= uiDiff;
 
-            if (!UpdateVictim() || me->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
+            if (!UpdateVictim() || !me->m_movementInfo.transport.guid.IsEmpty())
                 return;
 
             if (uiLightningArrowsTimer <= uiDiff)
@@ -985,7 +985,7 @@ public:
                 }
             } else uiPhaseTimer -= uiDiff;
 
-            if (!UpdateVictim() || me->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
+            if (!UpdateVictim() || !me->m_movementInfo.transport.guid.IsEmpty())
                 return;
 
             if (uiEviscerateTimer <= uiDiff)

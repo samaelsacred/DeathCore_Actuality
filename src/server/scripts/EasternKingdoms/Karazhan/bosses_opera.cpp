@@ -265,7 +265,7 @@ public:
 
         void JustDied(Unit* /*killer*/) override
         {
-            if (DorotheeGUID)
+            if (!DorotheeGUID.IsEmpty())
             {
                 Creature* Dorothee = (ObjectAccessor::GetCreature((*me), DorotheeGUID));
                 if (Dorothee && Dorothee->IsAlive())
@@ -815,11 +815,12 @@ class npc_grandmother : public CreatureScript
         {
             npc_grandmotherAI(Creature* creature) : ScriptedAI(creature) { }
 
+
             void sGossipSelect(Player* player, uint32 menuId, uint32 gossipListId) override
             {
                 if (menuId == OPTION_WHAT_PHAT_LEWTS_YOU_HAVE && gossipListId == 0)
                 {
-                    CloseGossipMenuFor(player);
+                    player->CLOSE_GOSSIP_MENU();
 
                     if (Creature* pBigBadWolf = me->SummonCreature(CREATURE_BIG_BAD_WOLF, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, HOUR*2*IN_MILLISECONDS))
                         pBigBadWolf->AI()->AttackStart(player);
@@ -1251,7 +1252,7 @@ public:
                         Julianne->setDeathState(JUST_DIED);
                         Julianne->CombatStop(true);
                         Julianne->DeleteThreatList();
-                        Julianne->SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                        Julianne->SetUInt32Value(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                     }
                     return;
                 }
@@ -1273,7 +1274,7 @@ public:
         void EnterCombat(Unit* /*who*/) override
         {
             Talk(SAY_ROMULO_AGGRO);
-            if (JulianneGUID)
+            if (!JulianneGUID.IsEmpty())
             {
                 Creature* Julianne = (ObjectAccessor::GetCreature((*me), JulianneGUID));
                 if (Julianne && Julianne->GetVictim())
@@ -1521,7 +1522,7 @@ void boss_julianne::boss_julianneAI::DamageTaken(Unit* /*done_by*/, uint32 &dama
                 Romulo->setDeathState(JUST_DIED);
                 Romulo->CombatStop(true);
                 Romulo->DeleteThreatList();
-                Romulo->SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                Romulo->SetUInt32Value(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
             }
 
             return;

@@ -40,7 +40,7 @@ class TC_GAME_API DynamicObject : public WorldObject, public GridObject<DynamicO
         void AddToWorld() override;
         void RemoveFromWorld() override;
 
-        bool CreateDynamicObject(ObjectGuid::LowType guidlow, Unit* caster, uint32 spellId, Position const& pos, float radius, DynamicObjectType type);
+        bool CreateDynamicObject(ObjectGuid::LowType guidlow, Unit* caster, SpellInfo const* spell, Position const& pos, float radius, DynamicObjectType type, uint32 spellXSpellVisualId);
         void Update(uint32 p_time) override;
         void Remove();
         void SetDuration(int32 newDuration);
@@ -62,6 +62,7 @@ class TC_GAME_API DynamicObject : public WorldObject, public GridObject<DynamicO
         Aura* _removedAura;
         Unit* _caster;
         int32 _duration; // for non-aura dynobjects
+        uint32 _spellXSpellVisualId;
         bool _isViewpoint;
 };
 #endif

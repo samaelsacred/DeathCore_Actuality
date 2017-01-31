@@ -1,18 +1,18 @@
 /*
+ * Copyright (C) 2016-2017 DeathCore <http://www.noffearrdeathproject.org/>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "PathGenerator.h"
@@ -35,14 +35,14 @@ PathGenerator::PathGenerator(const Unit* owner) :
 {
     memset(_pathPolyRefs, 0, sizeof(_pathPolyRefs));
 
-    TC_LOG_DEBUG("maps", "++ PathGenerator::PathGenerator for %u \n", _sourceUnit->GetGUID().GetCounter());
+    TC_LOG_DEBUG("maps", "++ PathGenerator::PathGenerator for %s", _sourceUnit->GetGUID().ToString().c_str());
 
     uint32 mapId = _sourceUnit->GetMapId();
     if (DisableMgr::IsPathfindingEnabled(mapId))
     {
         MMAP::MMapManager* mmap = MMAP::MMapFactory::createOrGetMMapManager();
-        _navMesh = mmap->GetNavMesh(mapId);
-        _navMeshQuery = mmap->GetNavMeshQuery(mapId, _sourceUnit->GetInstanceId());
+        _navMesh = mmap->GetNavMesh(mapId, _sourceUnit->GetTerrainSwaps());
+        _navMeshQuery = mmap->GetNavMeshQuery(mapId, _sourceUnit->GetInstanceId(), _sourceUnit->GetTerrainSwaps());
     }
 
     CreateFilter();
@@ -50,7 +50,7 @@ PathGenerator::PathGenerator(const Unit* owner) :
 
 PathGenerator::~PathGenerator()
 {
-    TC_LOG_DEBUG("maps", "++ PathGenerator::~PathGenerator() for %u \n", _sourceUnit->GetGUID().GetCounter());
+    TC_LOG_DEBUG("maps", "++ PathGenerator::~PathGenerator() for %s", _sourceUnit->GetGUID().ToString().c_str());
 }
 
 bool PathGenerator::CalculatePath(float destX, float destY, float destZ, bool forceDest, bool straightLine)
@@ -72,7 +72,7 @@ bool PathGenerator::CalculatePath(float destX, float destY, float destZ, bool fo
     _forceDestination = forceDest;
     _straightLine = straightLine;
 
-    TC_LOG_DEBUG("maps", "++ PathGenerator::CalculatePath() for %u \n", _sourceUnit->GetGUID().GetCounter());
+    TC_LOG_DEBUG("maps", "++ PathGenerator::CalculatePath() for %s", _sourceUnit->GetGUID().ToString().c_str());
 
     // make sure navMesh works - we can run on map w/o mmap
     // check if the start and end point have a .mmtile loaded (can we pass via not loaded tile on the way?)
@@ -394,7 +394,7 @@ void PathGenerator::BuildPolyPath(G3D::Vector3 const& startPos, G3D::Vector3 con
             // this is probably an error state, but we'll leave it
             // and hopefully recover on the next Update
             // we still need to copy our preffix
-            TC_LOG_ERROR("maps", "%u's Path Build failed: 0 length path", _sourceUnit->GetGUID().GetCounter());
+            TC_LOG_ERROR("maps", "%s's Path Build failed: 0 length path", _sourceUnit->GetGUID().ToString().c_str());
         }
 
         TC_LOG_DEBUG("maps", "++  m_polyLength=%u prefixPolyLength=%u suffixPolyLength=%u \n", _polyLength, prefixPolyLength, suffixPolyLength);
@@ -455,7 +455,7 @@ void PathGenerator::BuildPolyPath(G3D::Vector3 const& startPos, G3D::Vector3 con
         if (!_polyLength || dtStatusFailed(dtResult))
         {
             // only happens if we passed bad data to findPath(), or navmesh is messed up
-            TC_LOG_ERROR("maps", "%u's Path Build failed: 0 length path", _sourceUnit->GetGUID().GetCounter());
+            TC_LOG_ERROR("maps", "%s's Path Build failed: 0 length path", _sourceUnit->GetGUID().ToString().c_str());
             BuildShortcut();
             _type = PATHFIND_NOPATH;
             return;
@@ -940,9 +940,4 @@ void PathGenerator::ReducePathLenghtByDist(float dist)
         dist -= len;
         nextVec = currVec; // we're going backwards
     }
-}
-
-bool PathGenerator::IsInvalidDestinationZ(Unit const* target) const
-{
-    return (target->GetPositionZ() - GetActualEndPosition().z) > 5.0f;
 }

@@ -1,4 +1,4 @@
-# Copyright (C) 2016 DeathCore <http://www.noffearrdeathproject.org/>
+# Copyright (C) 2016-2017 DeathCore <http://www.noffearrdeathproject.org/>
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -22,6 +22,14 @@ set_target_properties(gsoap PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(gsoap
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_compile_definitions(gsoap
+  PUBLIC
+    -DWITH_OPENSSL)
+
+target_link_libraries(gsoap
+  PUBLIC
+    openssl)
 
 set_target_properties(gsoap
     PROPERTIES

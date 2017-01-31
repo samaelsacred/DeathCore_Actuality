@@ -63,11 +63,11 @@ class OutdoorPvPSI : public OutdoorPvP
 
         bool Update(uint32 diff) override;
 
-        void FillInitialWorldStates(WorldPacket &data) override;
+        void FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet) override;
 
         void SendRemoveWorldStates(Player* player) override;
 
-        bool HandleAreaTrigger(Player* player, uint32 trigger) override;
+        bool HandleAreaTrigger(Player* player, uint32 trigger, bool entered) override;
 
         bool HandleDropFlag(Player* player, uint32 spellId) override;
 

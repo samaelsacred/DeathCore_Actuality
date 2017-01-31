@@ -22,7 +22,7 @@
 
 uint32 const EncounterCount = 3;
 
-enum Data64
+enum BFDData64
 {
     DATA_SHRINE1,
     DATA_SHRINE2,
@@ -34,7 +34,7 @@ enum Data64
     DATA_MAINDOOR,
 };
 
-enum Data
+enum BFDData
 {
     DATA_GELIHAST,
     DATA_KELRIS,
@@ -43,7 +43,7 @@ enum Data
     DATA_EVENT
 };
 
-enum CreatureIds
+enum BFDCreatureIds
 {
     NPC_TWILIGHT_LORD_KELRIS                               = 4832,
     NPC_LORGUS_JETT                                        = 12902,
@@ -56,7 +56,7 @@ enum CreatureIds
     NPC_MORRIDUNE                                          = 6729
 };
 
-enum GameObjectIds
+enum BFDGameObjectIds
 {
     GO_SHRINE_OF_GELIHAST                                  = 103015,
     GO_FIRE_OF_AKU_MAI_1                                   = 21118,

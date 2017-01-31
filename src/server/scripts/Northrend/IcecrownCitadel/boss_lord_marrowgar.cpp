@@ -256,9 +256,6 @@ class boss_lord_marrowgar : public CreatureScript
                             Talk(SAY_BERSERK);
                             break;
                     }
-
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 // We should not melee attack when storming
@@ -585,7 +582,7 @@ class spell_marrowgar_coldflame_damage : public SpellScriptLoader
                 if (target->HasAura(SPELL_IMPALED))
                     return false;
 
-                if (target->GetExactDist2d(GetOwner()) > GetSpellInfo()->Effects[EFFECT_0].CalcRadius())
+                if (target->GetExactDist2d(GetOwner()) > GetSpellInfo()->GetEffect(target, EFFECT_0)->CalcRadius())
                     return false;
 
                 if (Aura* aur = target->GetAura(GetId()))
@@ -756,7 +753,7 @@ class at_lord_marrowgar_entrance : public AreaTriggerScript
     public:
         at_lord_marrowgar_entrance() : AreaTriggerScript("at_lord_marrowgar_entrance") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/) override
+        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/, bool /*entered*/) override
         {
             if (InstanceScript* instance = player->GetInstanceScript())
                 if (Creature* lordMarrowgar = ObjectAccessor::GetCreature(*player, instance->GetGuidData(DATA_LORD_MARROWGAR)))

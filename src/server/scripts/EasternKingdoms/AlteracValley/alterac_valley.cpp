@@ -168,8 +168,6 @@ class npc_av_marshal_or_warmaster : public CreatureScript
                             break;
                         }
                     }
-                    if (me->HasUnitState(UNIT_STATE_CASTING))
-                        return;
                 }
 
                 DoMeleeAttackIfReady();

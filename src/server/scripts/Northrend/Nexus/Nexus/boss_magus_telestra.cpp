@@ -15,10 +15,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GameEventMgr.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "nexus.h"
+#include "GameEventMgr.h"
 
 enum Spells
 {

@@ -19,6 +19,7 @@
 #define TRINITY_PACKETLOG_H
 
 #include "Common.h"
+#include "Opcodes.h"
 
 #include <boost/asio/ip/address.hpp>
 #include <mutex>
@@ -44,7 +45,7 @@ class TC_GAME_API PacketLog
 
         void Initialize();
         bool CanLogPacket() const { return (_file != NULL); }
-        void LogPacket(WorldPacket const& packet, Direction direction, boost::asio::ip::address const& addr, uint16 port);
+        void LogPacket(WorldPacket const& packet, Direction direction, boost::asio::ip::address const& addr, uint16 port, ConnectionType connectionType);
 
     private:
         FILE* _file;

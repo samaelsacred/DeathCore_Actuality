@@ -96,7 +96,7 @@ public:
                         if (me->GetDistance(me->GetHomePosition()) > 150.0f)
                         {
                             Talk(SAY_LEASH);
-                            EnterEvadeMode(EVADE_REASON_BOUNDARY);
+                            EnterEvadeMode();
                         }
                         events.ScheduleEvent(EVENT_CHECK, 1000);
                         break;

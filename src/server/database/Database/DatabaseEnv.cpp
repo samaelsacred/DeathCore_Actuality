@@ -20,3 +20,4 @@
 WorldDatabaseWorkerPool WorldDatabase;
 CharacterDatabaseWorkerPool CharacterDatabase;
 LoginDatabaseWorkerPool LoginDatabase;
+HotfixDatabaseWorkerPool HotfixDatabase;

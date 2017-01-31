@@ -471,7 +471,7 @@ class spell_sapphiron_icebolt : public SpellScriptLoader
 
         void HandleRemove(AuraEffect const* /*eff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (_block)
+            if (!_block.IsEmpty())
                 if (GameObject* oBlock = ObjectAccessor::GetGameObject(*GetTarget(), _block))
                     oBlock->Delete();
             GetTarget()->ApplySpellImmune(SPELL_ICEBOLT, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_FROST, false);
@@ -479,13 +479,13 @@ class spell_sapphiron_icebolt : public SpellScriptLoader
 
         void HandlePeriodic(AuraEffect const* /*eff*/)
         {
-            if (_block)
+            if (!_block.IsEmpty())
                 return;
             if (GetTarget()->isMoving())
                 return;
             float x, y, z;
             GetTarget()->GetPosition(x, y, z);
-            if (GameObject* block = GetTarget()->SummonGameObject(GO_ICEBLOCK, x, y, z, 0.f, G3D::Quat(), 25))
+            if (GameObject* block = GetTarget()->SummonGameObject(GO_ICEBLOCK, x, y, z, 0, 0, 0, 0, 0, 25))
                 _block = block->GetGUID();
         }
 

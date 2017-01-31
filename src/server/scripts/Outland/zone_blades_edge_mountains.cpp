@@ -881,7 +881,7 @@ class go_simon_cluster : public GameObjectScript
             if (Creature* bunny = go->FindNearestCreature(NPC_SIMON_BUNNY, 12.0f, true))
                 bunny->AI()->SetData(go->GetEntry(), 0);
 
-            player->CastSpell(player, go->GetGOInfo()->goober.spellId, true);
+            player->CastSpell(player, go->GetGOInfo()->goober.spell, true);
             go->AddUse();
             return true;
         }
@@ -911,7 +911,7 @@ class go_apexis_relic : public GameObjectScript
 
         bool OnGossipSelect(Player* player, GameObject* go, uint32 /*sender*/, uint32 /*action*/) override
         {
-            CloseGossipMenuFor(player);
+            player->CLOSE_GOSSIP_MENU();
 
             bool large = (go->GetEntry() == GO_APEXIS_MONUMENT);
             if (player->HasItemCount(ITEM_APEXIS_SHARD, large ? 35 : 1))
@@ -958,7 +958,7 @@ public:
             {
                 // Spell 37392 does not exist in dbc, manually spawning
                 me->SummonCreature(NPC_OSCILLATING_FREQUENCY_SCANNER_TOP_BUNNY, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 0.5f, me->GetOrientation(), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 50000);
-                me->SummonGameObject(GO_OSCILLATING_FREQUENCY_SCANNER, *me, G3D::Quat(), 50);
+                me->SummonGameObject(GO_OSCILLATING_FREQUENCY_SCANNER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), 0, 0, 0, 0, 50);
                 me->DespawnOrUnsummon(50000);
             }
 

@@ -31,6 +31,14 @@ namespace Movement
     using G3D::Vector3;
     using G3D::Vector4;
 
+    enum MonsterMoveType
+    {
+        MONSTER_MOVE_NORMAL         = 0,
+        MONSTER_MOVE_FACING_SPOT    = 1,
+        MONSTER_MOVE_FACING_TARGET  = 2,
+        MONSTER_MOVE_FACING_ANGLE   = 3
+    };
+
     inline uint32 SecToMS(float sec)
     {
         return static_cast<uint32>(sec * 1000.f);
@@ -70,6 +78,8 @@ namespace Movement
 
     TC_GAME_API extern float gravity;
     TC_GAME_API extern UInt32Counter splineIdGen;
+    TC_GAME_API extern std::string MovementFlags_ToString(uint32 flags);
+    TC_GAME_API extern std::string MovementFlagsExtra_ToString(uint32 flags);
 }
 
 #endif // TRINITYSERVER_TYPEDEFS_H

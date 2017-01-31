@@ -18,7 +18,7 @@
 #ifndef ADT_H
 #define ADT_H
 
-#include "mpq_libmpq04.h"
+#include "cascfile.h"
 #include "wmo.h"
 #include "model.h"
 
@@ -110,7 +110,7 @@ class ADTFile
 {
 private:
     //size_t mcnk_offsets[256], mcnk_sizes[256];
-    MPQFile ADT;
+    CASCFile ADT;
     //mcell Mcell;
     std::string Adtfilename;
 public:
@@ -118,8 +118,8 @@ public:
     ~ADTFile();
     int nWMO;
     int nMDX;
-    std::string* WmoInstansName;
-    std::string* ModelInstansName;
+    std::vector<std::string> WmoInstanceNames;
+    std::vector<std::string> ModelInstanceNames;
     bool init(uint32 map_num, uint32 tileX, uint32 tileY);
     //void LoadMapChunks();
 
@@ -132,11 +132,11 @@ public:
 */
 };
 
-const char * GetPlainName(const char * FileName);
-char * GetPlainName(char * FileName);
-char * GetExtension(char * FileName);
-void fixnamen(char *name, size_t len);
-void fixname2(char *name, size_t len);
+char const* GetPlainName(char const* FileName);
+char* GetPlainName(char* FileName);
+char* GetExtension(char* FileName);
+void FixNameCase(char* name, size_t len);
+void FixNameSpaces(char* name, size_t len);
 //void fixMapNamen(char *name, size_t len);
 
 #endif

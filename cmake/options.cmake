@@ -1,14 +1,19 @@
 # Copyright (C) 2016-2017 DeathCore <http://www.noffearrdeathproject.org/>
 #
-# This file is free software; as a special exception the author gives
-# unlimited permission to copy and/or distribute it, with or without
-# modifications, as long as this notice is preserved.
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.
 #
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program. If not, see <http://www.gnu.org/licenses/>.
 
-option(SERVERS          "Build worldserver and authserver"                            1)
+option(SERVERS          "Build worldserver and bnetserver"                            1)
 
 set(SCRIPTS_AVAILABLE_OPTIONS none static dynamic minimal-static minimal-dynamic)
 
@@ -17,8 +22,7 @@ if (SCRIPTS)
   list (FIND SCRIPTS_AVAILABLE_OPTIONS "${SCRIPTS}" SCRIPTS_INDEX)
   if (${SCRIPTS_INDEX} EQUAL -1)
     message(FATAL_ERROR "The value (${SCRIPTS}) of your SCRIPTS variable is invalid! "
-                        "Allowed values are: ${SCRIPTS_AVAILABLE_OPTIONS} if you still "
-                        "have problems search on forum for TCE00019.")
+                        "Allowed values are: ${SCRIPTS_AVAILABLE_OPTIONS}")
   endif()
 endif()
 

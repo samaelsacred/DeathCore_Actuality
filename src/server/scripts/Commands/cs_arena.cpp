@@ -83,7 +83,7 @@ public:
 
         if (type == 2 || type == 3 || type == 5 )
         {
-            if (Player::GetArenaTeamIdFromCharacterInfo(target->GetGUID(), type) != 0)
+            if (Player::GetArenaTeamIdFromDB(target->GetGUID(), type) != 0)
             {
                 handler->PSendSysMessage(LANG_ARENA_ERROR_SIZE, target->GetName().c_str());
                 handler->SetSentErrorMessage(true);
@@ -101,7 +101,7 @@ public:
             }
 
             sArenaTeamMgr->AddArenaTeam(arena);
-            handler->PSendSysMessage(LANG_ARENA_CREATE, arena->GetName().c_str(), arena->GetId(), arena->GetType(), arena->GetCaptain().GetCounter());
+            handler->PSendSysMessage(LANG_ARENA_CREATE, arena->GetName().c_str(), arena->GetId(), arena->GetType(), arena->GetCaptain().ToString().c_str());
         }
         else
         {
@@ -141,8 +141,8 @@ public:
         std::string name = arena->GetName();
         arena->Disband();
         if (handler->GetSession())
-            TC_LOG_DEBUG("bg.arena", "GameMaster: %s [GUID: %u] disbanded arena team type: %u [Id: %u].",
-                handler->GetSession()->GetPlayer()->GetName().c_str(), handler->GetSession()->GetPlayer()->GetGUID().GetCounter(), arena->GetType(), teamId);
+            TC_LOG_DEBUG("bg.arena", "GameMaster: %s [%s] disbanded arena team type: %u [Id: %u].",
+                handler->GetSession()->GetPlayer()->GetName().c_str(), handler->GetSession()->GetPlayer()->GetGUID().ToString().c_str(), arena->GetType(), teamId);
         else
             TC_LOG_DEBUG("bg.arena", "Console: disbanded arena team type: %u [Id: %u].", arena->GetType(), teamId);
 
@@ -206,8 +206,8 @@ public:
 
         handler->PSendSysMessage(LANG_ARENA_RENAME, arena->GetId(), oldArenaStr, newArenaStr);
         if (handler->GetSession())
-            TC_LOG_DEBUG("bg.arena", "GameMaster: %s [GUID: %u] rename arena team \"%s\"[Id: %u] to \"%s\"",
-                handler->GetSession()->GetPlayer()->GetName().c_str(), handler->GetSession()->GetPlayer()->GetGUID().GetCounter(), oldArenaStr, arena->GetId(), newArenaStr);
+            TC_LOG_DEBUG("bg.arena", "GameMaster: %s [%s] rename arena team \"%s\"[Id: %u] to \"%s\"",
+                handler->GetSession()->GetPlayer()->GetName().c_str(), handler->GetSession()->GetPlayer()->GetGUID().ToString().c_str(), oldArenaStr, arena->GetId(), newArenaStr);
         else
             TC_LOG_DEBUG("bg.arena", "Console: rename arena team \"%s\"[Id: %u] to \"%s\"", oldArenaStr, arena->GetId(), newArenaStr);
 
@@ -273,20 +273,21 @@ public:
 
         arena->SetCaptain(targetGuid);
 
-        CharacterInfo const* oldCaptainNameData = sWorld->GetCharacterInfo(arena->GetCaptain());
-        if (!oldCaptainNameData)
+        std::string oldCaptainName;
+        if (!ObjectMgr::GetPlayerNameByGUID(arena->GetCaptain(), oldCaptainName))
         {
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->PSendSysMessage(LANG_ARENA_CAPTAIN, arena->GetName().c_str(), arena->GetId(), oldCaptainNameData->Name.c_str(), target->GetName().c_str());
+        handler->PSendSysMessage(LANG_ARENA_CAPTAIN, arena->GetName().c_str(), arena->GetId(), oldCaptainName.c_str(), target->GetName().c_str());
         if (handler->GetSession())
-            TC_LOG_DEBUG("bg.arena", "GameMaster: %s [GUID: %u] promoted player: %s [GUID: %u] to leader of arena team \"%s\"[Id: %u]",
-                handler->GetSession()->GetPlayer()->GetName().c_str(), handler->GetSession()->GetPlayer()->GetGUID().GetCounter(), target->GetName().c_str(), target->GetGUID().GetCounter(), arena->GetName().c_str(), arena->GetId());
+            TC_LOG_DEBUG("bg.arena", "GameMaster: %s [%s] promoted player: %s [%s] to leader of arena team \"%s\"[Id: %u]",
+                handler->GetSession()->GetPlayer()->GetName().c_str(), handler->GetSession()->GetPlayer()->GetGUID().ToString().c_str(),
+                target->GetName().c_str(), target->GetGUID().ToString().c_str(), arena->GetName().c_str(), arena->GetId());
         else
-            TC_LOG_DEBUG("bg.arena", "Console: promoted player: %s [GUID: %u] to leader of arena team \"%s\"[Id: %u]",
-                target->GetName().c_str(), target->GetGUID().GetCounter(), arena->GetName().c_str(), arena->GetId());
+            TC_LOG_DEBUG("bg.arena", "Console: promoted player: %s [%s] to leader of arena team \"%s\"[Id: %u]",
+                target->GetName().c_str(), target->GetGUID().ToString().c_str(), arena->GetName().c_str(), arena->GetId());
 
         return true;
     }
@@ -311,7 +312,7 @@ public:
 
         handler->PSendSysMessage(LANG_ARENA_INFO_HEADER, arena->GetName().c_str(), arena->GetId(), arena->GetRating(), arena->GetType(), arena->GetType());
         for (ArenaTeam::MemberList::iterator itr = arena->m_membersBegin(); itr != arena->m_membersEnd(); ++itr)
-            handler->PSendSysMessage(LANG_ARENA_INFO_MEMBERS, itr->Name.c_str(), itr->Guid.GetCounter(), itr->PersonalRating, (arena->GetCaptain() == itr->Guid ? "- Captain" : ""));
+            handler->PSendSysMessage(LANG_ARENA_INFO_MEMBERS, itr->Name.c_str(), itr->Guid.ToString().c_str(), itr->PersonalRating, (arena->GetCaptain() == itr->Guid ? " - Captain" : ""));
 
         return true;
     }
