@@ -19,6 +19,16 @@
     
 /* Zone Pandaren */
 void AddSC_zone_pandaren();
+void AddSC_zone_isle_of_giants();
+
+/* Gate of the Setting Sun */
+void AddSC_instance_gate_setting_sun();
+void AddSC_gate_setting_sun();
+void AddSC_boss_commander_rimok();
+void AddSC_boss_raigonn();
+void AddSC_boss_saboteur_kiptilak();
+void AddSC_boss_striker_gadok();
+
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
@@ -26,4 +36,13 @@ void AddPandariaScripts()
 {
     /* Zone Pandaren */
     AddSC_zone_pandaren();
+    AddSC_zone_isle_of_giants();
+
+    /* Gate of the Setting Sun */
+    AddSC_instance_gate_setting_sun();
+    AddSC_gate_setting_sun();
+    AddSC_boss_commander_rimok();
+    AddSC_boss_raigonn();
+    AddSC_boss_saboteur_kiptilak();
+    AddSC_boss_striker_gadok();
 }

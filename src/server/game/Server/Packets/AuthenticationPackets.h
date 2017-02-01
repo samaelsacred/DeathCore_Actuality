@@ -25,8 +25,6 @@
 #include "SHA1.h"
 #include <boost/asio/ip/tcp.hpp>
 
-struct CharacterTemplate;
-
 using boost::asio::ip::tcp;
 
 namespace WorldPackets
@@ -144,7 +142,7 @@ namespace WorldPackets
                 BillingInfo Billing;
 
                 std::vector<RealmInfo> VirtualRealms;     ///< list of realms connected to this one (inclusive) @todo implement
-                std::vector<CharacterTemplate const*> Templates; ///< list of pre-made character templates.
+                std::vector<CharacterTemplate> Templates; ///< list of pre-made character templates.
 
                 ExpansionRequirementContainer const* AvailableClasses = nullptr; ///< the minimum AccountExpansion required to select the classes
                 ExpansionRequirementContainer const* AvailableRaces = nullptr; ///< the minimum AccountExpansion required to select the races

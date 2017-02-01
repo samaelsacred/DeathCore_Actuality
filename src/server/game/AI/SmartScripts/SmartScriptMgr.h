@@ -470,7 +470,7 @@ enum SMART_ACTION
     SMART_ACTION_RANDOM_PHASE_RANGE                 = 31,     // PhaseMin, PhaseMax
     SMART_ACTION_RESET_GOBJECT                      = 32,     //
     SMART_ACTION_CALL_KILLEDMONSTER                 = 33,     // CreatureId,
-    SMART_ACTION_SET_INST_DATA                      = 34,     // Field, Data, Type (0 = SetData, 1 = SetBossState)
+    SMART_ACTION_SET_INST_DATA                      = 34,     // Field, Data
     SMART_ACTION_SET_INST_DATA64                    = 35,     // Field,
     SMART_ACTION_UPDATE_TEMPLATE                    = 36,     // Entry
     SMART_ACTION_DIE                                = 37,     // No Params
@@ -553,8 +553,9 @@ enum SMART_ACTION
     SMART_ACTION_RISE_UP                            = 114,    // distance
     SMART_ACTION_RANDOM_SOUND                       = 115,    // soundId1, soundId2, soundId3, soundId4, soundId5, onlySelf
     SMART_ACTION_SET_CORPSE_DELAY                   = 116,    // timer
+    SMART_ACTION_PLAY_ANIMKIT                       = 117,    // id, type
 
-    SMART_ACTION_END                                = 117
+    SMART_ACTION_END                                = 118
 };
 
 struct SmartAction
@@ -717,7 +718,6 @@ struct SmartAction
         {
             uint32 field;
             uint32 data;
-            uint32 type;
         } setInstanceData;
 
         struct
@@ -837,6 +837,8 @@ struct SmartAction
         struct
         {
             uint32 run;
+            uint32 speed;
+            uint32 speedDivider;
         } setRun;
 
         struct
@@ -968,6 +970,8 @@ struct SmartAction
             uint32 pointId;
             uint32 transport;
             uint32 disablePathfinding;
+            uint32 closePoint;
+            uint32 distance;
         } MoveToPos;
 
         struct
@@ -1049,6 +1053,12 @@ struct SmartAction
         {
             uint32 timer;
         } corpseDelay;
+
+        struct
+        {
+            uint32 animKit;
+            uint32 type;
+        } animKit;
 
         //! Note for any new future actions
         //! All parameters must have type uint32
@@ -1652,6 +1662,16 @@ class TC_GAME_API SmartAIMgr
             if (!sSoundKitStore.LookupEntry(entry))
             {
                 TC_LOG_ERROR("sql.sql", "SmartAIMgr: Entry " SI64FMTD " SourceType %u Event %u Action %u uses non-existent Sound entry %u, skipped.", e.entryOrGuid, e.GetScriptType(), e.event_id, e.GetActionType(), entry);
+                return false;
+            }
+            return true;
+        }
+
+        bool IsAnimKitValid(SmartScriptHolder const& e, uint32 entry)
+        {
+            if (!sAnimKitStore.LookupEntry(entry))
+            {
+                TC_LOG_ERROR("sql.sql", "SmartAIMgr: Entry " SI64FMTD " SourceType %u Event %u Action %u uses non-existent AnimKit entry %u, skipped.", e.entryOrGuid, e.GetScriptType(), e.event_id, e.GetActionType(), entry);
                 return false;
             }
             return true;

@@ -2020,7 +2020,9 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
     if (!m_originalCaster)
         return;
 
-    int32 duration = m_spellInfo->CalcDuration(m_originalCaster);
+    int32 duration = m_spellInfo->GetDuration();
+    if (Player* modOwner = m_originalCaster->GetSpellModOwner())
+        modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_DURATION, duration);
 
     TempSummon* summon = NULL;
 
@@ -2374,7 +2376,7 @@ void Spell::EffectAddFarsight(SpellEffIndex /*effIndex*/)
         return;
 
     float radius = effectInfo->CalcRadius();
-    int32 duration = m_spellInfo->CalcDuration(m_caster);
+    int32 duration = m_spellInfo->GetDuration();
     // Caster not in world, might be spell triggered from aura removal
     if (!m_caster->IsInWorld())
         return;
@@ -3165,7 +3167,7 @@ void Spell::EffectSummonObjectWild(SpellEffIndex effIndex)
 
     pGameObj->CopyPhaseFrom(m_caster);
 
-    int32 duration = m_spellInfo->CalcDuration(m_caster);
+    int32 duration = m_spellInfo->GetDuration();
 
     pGameObj->SetRespawnTime(duration > 0 ? duration/IN_MILLISECONDS : 0);
     pGameObj->SetSpellId(m_spellInfo->Id);
@@ -3791,7 +3793,7 @@ void Spell::EffectDuel(SpellEffIndex effIndex)
 
     pGameObj->SetUInt32Value(GAMEOBJECT_FACTION, m_caster->getFaction());
     pGameObj->SetUInt32Value(GAMEOBJECT_LEVEL, m_caster->getLevel()+1);
-    int32 duration = m_spellInfo->CalcDuration(m_caster);
+    int32 duration = m_spellInfo->GetDuration();
     pGameObj->SetRespawnTime(duration > 0 ? duration/IN_MILLISECONDS : 0);
     pGameObj->SetSpellId(m_spellInfo->Id);
 
@@ -4125,7 +4127,7 @@ void Spell::EffectSummonObject(SpellEffIndex effIndex)
     go->CopyPhaseFrom(m_caster);
 
     //pGameObj->SetUInt32Value(GAMEOBJECT_LEVEL, m_caster->getLevel());
-    int32 duration = m_spellInfo->CalcDuration(m_caster);
+    int32 duration = m_spellInfo->GetDuration();
     go->SetRespawnTime(duration > 0 ? duration/IN_MILLISECONDS : 0);
     go->SetSpellId(m_spellInfo->Id);
     m_caster->AddGameObject(go);
@@ -4782,7 +4784,7 @@ void Spell::EffectTransmitted(SpellEffIndex effIndex)
 
     pGameObj->CopyPhaseFrom(m_caster);
 
-    int32 duration = m_spellInfo->CalcDuration(m_caster);
+    int32 duration = m_spellInfo->GetDuration();
 
     switch (goinfo->type)
     {
@@ -5293,7 +5295,26 @@ void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* 
                     level = skill202 / 5;
 
     float radius = 5.0f;
-    int32 duration = m_spellInfo->CalcDuration(m_originalCaster);
+    int32 duration = m_spellInfo->GetDuration();
+
+    switch (m_spellInfo->Id)
+    {
+        case 101643: /// Transencence
+            for (Unit::ControlList::const_iterator itr = m_originalCaster->m_Controlled.begin(); itr != m_originalCaster->m_Controlled.end(); ++itr)
+            {
+                if ((*itr)->GetEntry() == 54569)
+                {
+                    ((Creature*)(*itr))->DespawnOrUnsummon();
+                    break;
+                }
+            }
+            break;
+        default:
+            break;
+    }
+
+    if (Player* modOwner = m_originalCaster->GetSpellModOwner())
+        modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_DURATION, duration);
 
     //TempSummonType summonType = (duration == 0) ? TEMPSUMMON_DEAD_DESPAWN : TEMPSUMMON_TIMED_DESPAWN;
     Map* map = caster->GetMap();
@@ -5310,6 +5331,17 @@ void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* 
         TempSummon* summon = map->SummonCreature(entry, pos, properties, duration, caster, m_spellInfo->Id);
         if (!summon)
             return;
+
+        // Transcendence shouldn't be initialized twice
+        if (summon->GetEntry() == 54569)
+        {
+            summon->SetOwnerGUID(m_originalCaster->GetGUID());
+            summon->SetCreatorGUID(m_originalCaster->GetGUID());
+            summon->setFaction(m_originalCaster->getFaction());
+            summon->SetUInt32Value(UNIT_CREATED_BY_SPELL, m_spellInfo->Id);
+            ExecuteLogEffectSummonObject(i, summon);
+            return;
+        }
 
         if (summon->HasUnitTypeMask(UNIT_MASK_GUARDIAN))
             ((Guardian*)summon)->InitStatsForLevel(level);
@@ -5606,12 +5638,17 @@ void Spell::EffectCreateAreaTrigger(SpellEffIndex /*effIndex*/)
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
         return;
 
+    Position pos;
     if (!m_targets.HasDst())
-        return;
+        pos = GetCaster()->GetPosition();
+    else
+        pos = destTarget->GetPosition();
 
-    int32 duration = GetSpellInfo()->CalcDuration(GetCaster());
-    AreaTrigger* areaTrigger = new AreaTrigger();
-    if (!areaTrigger->CreateAreaTrigger(effectInfo->MiscValue, GetCaster(), nullptr, GetSpellInfo(), destTarget->GetPosition(), duration, m_SpellVisual, m_castId))
+    // trigger entry/miscvalue relation is currently unknown, for now use MiscValue as trigger entry
+    uint32 triggerEntry = effectInfo->MiscValue;
+
+    AreaTrigger * areaTrigger = new AreaTrigger;
+    if (!areaTrigger->CreateAreaTrigger(GetCaster()->GetMap()->GenerateLowGuid<HighGuid::AreaTrigger>(), triggerEntry, GetCaster(), GetSpellInfo(), pos, m_SpellVisual))
         delete areaTrigger;
 }
 
@@ -5832,7 +5869,7 @@ void Spell::EffectUpdatePlayerPhase(SpellEffIndex /*effIndex*/)
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
         return;
 
-    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER || !unitTarget->IsPet())
         return;
 
     unitTarget->UpdateAreaAndZonePhase();

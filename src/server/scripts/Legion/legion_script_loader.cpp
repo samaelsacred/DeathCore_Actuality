@@ -20,6 +20,9 @@
 	//Zone Demon Hunter
 void AddSC_zone_demon_hunter();
 
+	//World Boss
+void AddSC_world_boss();
+
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
@@ -27,4 +30,7 @@ void AddLegionScripts()
 {
 	//Zone Demon Hunter
 	AddSC_zone_demon_hunter();
+	
+	//World Boss
+	AddSC_world_boss();
 }

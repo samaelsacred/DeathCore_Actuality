@@ -80,11 +80,6 @@ namespace WorldPackets
         class GuildGetAchievementMembers;
     }
 
-    namespace AreaTrigger
-    {
-        class AreaTrigger;
-    }
-
     namespace Artifact
     {
         class ArtifactAddPower;
@@ -409,6 +404,7 @@ namespace WorldPackets
 
     namespace Misc
     {
+        class AreaTrigger;
         class SetSelection;
         class ViolenceLevel;
         class TimeSyncResponse;
@@ -1231,7 +1227,7 @@ class TC_GAME_API WorldSession
         void HandleDelIgnoreOpcode(WorldPackets::Social::DelIgnore& packet);
         void HandleSetContactNotesOpcode(WorldPackets::Social::SetContactNotes& packet);
 
-        void HandleAreaTriggerOpcode(WorldPackets::AreaTrigger::AreaTrigger& packet);
+        void HandleAreaTriggerOpcode(WorldPackets::Misc::AreaTrigger& packet);
 
         void HandleSetFactionAtWar(WorldPackets::Character::SetFactionAtWar& packet);
         void HandleSetFactionNotAtWar(WorldPackets::Character::SetFactionNotAtWar& packet);

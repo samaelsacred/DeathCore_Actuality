@@ -63,7 +63,9 @@ enum DruidSpells
     SPELL_DRUID_SAVAGE_ROAR                 = 62071,
     SPELL_DRUID_STAMPEDE_BAER_RANK_1        = 81016,
     SPELL_DRUID_STAMPEDE_CAT_RANK_1         = 81021,
-    SPELL_DRUID_STAMPEDE_CAT_STATE          = 109881
+    SPELL_DRUID_STAMPEDE_CAT_STATE          = 109881,
+    SPELL_DRUID_CENARIOUS_WARD_HEALING      = 102352,
+    SPELL_DRUID_INCARNATION_CHOSEN_OF_ELUNE = 122114
 };
 
 // 1850 - Dash
@@ -1293,6 +1295,291 @@ class spell_dru_wild_growth : public SpellScriptLoader
         }
 };
 
+// Spell 105737 Might of Ursoc Guardian Druid.
+class spell_dru_might_of_ursoc : public SpellScriptLoader
+{
+    public:
+        spell_dru_might_of_ursoc() : SpellScriptLoader("spell_dru_might_of_ursoc") { }
+
+        class spell_dru_might_of_ursoc_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_dru_might_of_ursoc_AuraScript);
+
+            void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
+            {
+                amount = GetUnitOwner()->CountPctFromMaxHealth(amount);
+            }
+
+            void Register() override
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_dru_might_of_ursoc_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_MOD_INCREASE_HEALTH_2);
+            }
+        };
+
+        AuraScript* GetAuraScript() const override
+        {
+            return new spell_dru_might_of_ursoc_AuraScript();
+        }
+};
+
+// 102351 - Cenarion Ward
+// 7.x.x
+class spell_dru_cenarion_ward : public SpellScriptLoader
+{
+    public:
+        spell_dru_cenarion_ward() : SpellScriptLoader("spell_dru_cenarion_ward") { }
+
+        class spell_dru_cenarion_ward_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_dru_cenarion_ward_AuraScript);
+
+            bool Validate(SpellInfo const* /*spellInfo*/) override
+            {
+                if (!sSpellMgr->GetSpellInfo(SPELL_DRUID_CENARIOUS_WARD_HEALING))
+                    return false;
+                return true;
+            }
+
+            void HandleProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
+            {
+                PreventDefaultAction();
+                int32 basePoints0 = CalculatePct(eventInfo.GetDamageInfo()->GetDamage(), aurEff->GetAmount());
+
+                GetCaster()->CastCustomSpell(GetTarget(), SPELL_DRUID_CENARIOUS_WARD_HEALING, &basePoints0, NULL, NULL, true);
+            }
+
+            void Register() override
+            {
+                OnEffectProc += AuraEffectProcFn(spell_dru_cenarion_ward_AuraScript::HandleProc, EFFECT_0, SPELL_AURA_DUMMY);
+            }
+        };
+
+        AuraScript* GetAuraScript() const override
+        {
+            return new spell_dru_cenarion_ward_AuraScript();
+        }
+};
+
+// Nature's Vigil - 124974
+// 7.x.x
+class spell_druid_natures_vigil : public SpellScriptLoader
+{
+    public:
+        spell_druid_natures_vigil() : SpellScriptLoader("spell_druid_natures_vigil") { }
+
+        class spell_druid_natures_vigil_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_druid_natures_vigil_AuraScript);
+
+            void OnProc(const AuraEffect* aurEff, ProcEventInfo& eventInfo)
+            {
+                PreventDefaultAction();
+
+                if (!GetCaster())
+                    return;
+
+                Unit* _unit = GetCaster()->ToUnit();
+                if (!_unit)
+                    return;
+                //No double procs from the Nature's Vigil heal itself
+                if (GetSpellInfo()->Id == 124988)
+                    return;
+
+                if (eventInfo.GetActor()->GetGUID() != _unit->GetGUID())
+                    return;
+
+                if (!eventInfo.GetDamageInfo()->GetSpellInfo())
+                    return;
+                
+                if (!(eventInfo.GetDamageInfo()->GetDamage()) && !(eventInfo.GetHealInfo()->GetHeal()))
+                    return;
+
+                if (!(eventInfo.GetDamageInfo()->GetDamageType() == SPELL_DIRECT_DAMAGE) && !(eventInfo.GetDamageInfo()->GetDamageType() == HEAL))
+                    return;
+
+                int32 bp = 0;
+
+                if (eventInfo.GetDamageInfo()->GetSpellInfo()->IsPositive())
+                {
+                    bp = eventInfo.GetHealInfo()->GetHeal();
+                    _unit->CastCustomSpell(_unit, 124988, &bp, NULL, NULL, true);
+                    _unit->CastCustomSpell(_unit, 124991, &bp, NULL, NULL, true);
+                }
+                else
+                {
+                    bp = eventInfo.GetDamageInfo()->GetDamage();
+                    _unit->CastCustomSpell(_unit, 124988, &bp, NULL, NULL, true);
+                }
+            }
+
+            void Register() override
+            {
+                OnEffectProc += AuraEffectProcFn(spell_druid_natures_vigil_AuraScript::OnProc, EFFECT_2, SPELL_AURA_PERIODIC_DUMMY);
+            }
+        };
+
+        AuraScript* GetAuraScript() const override
+        {
+            return new spell_druid_natures_vigil_AuraScript();
+        }
+};
+
+// Called by Incarnation : Chosen of Elune - 102560, Incarnation : Son of Ursoc - 102558 and Incarnation : King of the Jungle - 102543
+// Incarnation - Skins
+// 7.x.x
+class spell_dru_incarnation_skins: public SpellScriptLoader
+{
+    public:
+        spell_dru_incarnation_skins() : SpellScriptLoader("spell_dru_incarnation_skins") { }
+
+        class spell_dru_incarnation_skins_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_dru_incarnation_skins_AuraScript);
+
+            void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Player* player = GetTarget()->ToPlayer())
+                    player->SetDisplayId(player->GetModelForForm(player->GetShapeshiftForm()));
+            }
+
+            void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Player* player = GetTarget()->ToPlayer())
+                    player->SetDisplayId(player->GetModelForForm(player->GetShapeshiftForm()));
+            }
+
+            void Register() override
+            {
+                switch (m_scriptSpellId)
+                {
+                    case 102543:// King of the Jungle
+                        OnEffectApply += AuraEffectApplyFn(spell_dru_incarnation_skins_AuraScript::OnApply, EFFECT_0, SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS, AURA_EFFECT_HANDLE_REAL);
+                        OnEffectRemove += AuraEffectRemoveFn(spell_dru_incarnation_skins_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS, AURA_EFFECT_HANDLE_REAL);
+                        break;
+                    case 102558:// Son of Ursoc
+                        OnEffectApply += AuraEffectApplyFn(spell_dru_incarnation_skins_AuraScript::OnApply, EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER, AURA_EFFECT_HANDLE_REAL);
+                        OnEffectRemove += AuraEffectRemoveFn(spell_dru_incarnation_skins_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER, AURA_EFFECT_HANDLE_REAL);
+                        break;
+                    case 102560:// Chosen of Elune
+                        OnEffectApply += AuraEffectApplyFn(spell_dru_incarnation_skins_AuraScript::OnApply, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE, AURA_EFFECT_HANDLE_REAL);
+                        OnEffectRemove += AuraEffectRemoveFn(spell_dru_incarnation_skins_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE, AURA_EFFECT_HANDLE_REAL);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+
+        AuraScript* GetAuraScript() const override
+        {
+            return new spell_dru_incarnation_skins_AuraScript();
+        }
+};
+
+// Incarnation : Chosen of Elune - 102560
+// 7.x.x
+class spell_dru_incarnation_chosen_of_elune: public SpellScriptLoader
+{
+    public:
+        spell_dru_incarnation_chosen_of_elune() : SpellScriptLoader("spell_dru_incarnation_chosen_of_elune") { }
+
+        class spell_dru_incarnation_chosen_of_elune_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_dru_incarnation_chosen_of_elune_AuraScript);
+
+            void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Player* player = GetTarget()->ToPlayer())
+                    player->CastSpell(player, SPELL_DRUID_INCARNATION_CHOSEN_OF_ELUNE, true);
+            }
+
+            void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Player* player = GetTarget()->ToPlayer())
+                    player->RemoveAura(SPELL_DRUID_INCARNATION_CHOSEN_OF_ELUNE);
+            }
+
+            void Register() override
+            {
+                OnEffectApply += AuraEffectApplyFn(spell_dru_incarnation_chosen_of_elune_AuraScript::OnApply, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE, AURA_EFFECT_HANDLE_REAL);
+                OnEffectRemove += AuraEffectRemoveFn(spell_dru_incarnation_chosen_of_elune_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE, AURA_EFFECT_HANDLE_REAL);
+            }
+        };
+
+        AuraScript* GetAuraScript() const override
+        {
+            return new spell_dru_incarnation_chosen_of_elune_AuraScript();
+        }
+};
+
+// Wild Charge (Moonkin) - 102383
+// 7.x.x
+class spell_dru_wild_charge_moonkin: public SpellScriptLoader
+{
+    public:
+        spell_dru_wild_charge_moonkin() : SpellScriptLoader("spell_dru_wild_charge_moonkin") { }
+
+        class spell_dru_wild_charge_moonkin_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_dru_wild_charge_moonkin_SpellScript);
+
+            SpellCastResult CheckFight()
+            {
+                if (GetCaster())
+                {
+                    if (!GetCaster()->IsInCombat())
+                        return SPELL_FAILED_DONT_REPORT;
+                }
+                else
+                    return SPELL_FAILED_DONT_REPORT;
+
+                return SPELL_CAST_OK;
+            }
+
+            void Register() override
+            {
+                OnCheckCast += SpellCheckCastFn(spell_dru_wild_charge_moonkin_SpellScript::CheckFight);
+            }
+        };
+
+        SpellScript* GetSpellScript() const override
+        {
+            return new spell_dru_wild_charge_moonkin_SpellScript();
+        }
+};
+
+// Thrash (bear) - 77758
+// 7.x.x
+class spell_dru_thrash_bear: public SpellScriptLoader
+{
+    public:
+        spell_dru_thrash_bear() : SpellScriptLoader("spell_dru_thrash_bear") { }
+
+        class spell_dru_thrash_bear_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_dru_thrash_bear_AuraScript);
+
+            void OnTick(AuraEffect const* /*aurEff*/)
+            {
+                if (Unit* caster = GetCaster())
+                {
+                    // Each tick grant 4 point of rage // legion
+                    caster->ModifyPower(POWER_RAGE, 4 * GetCaster()->GetPower(POWER_RAGE));
+                }
+            }
+
+            void Register() override
+            {
+                OnEffectPeriodic += AuraEffectPeriodicFn(spell_dru_thrash_bear_AuraScript::OnTick, EFFECT_1, SPELL_AURA_PERIODIC_DAMAGE);
+            }
+        };
+
+        AuraScript* GetAuraScript() const override
+        {
+            return new spell_dru_thrash_bear_AuraScript();
+        }
+};
+
 void AddSC_druid_spell_scripts()
 {
     new spell_dru_dash();
@@ -1321,4 +1608,11 @@ void AddSC_druid_spell_scripts()
     new spell_dru_typhoon();
     new spell_dru_t10_restoration_4p_bonus();
     new spell_dru_wild_growth();
+    new spell_dru_might_of_ursoc();
+    new spell_dru_cenarion_ward();
+    new spell_druid_natures_vigil();
+    new spell_dru_incarnation_skins();
+    new spell_dru_incarnation_chosen_of_elune();
+    new spell_dru_wild_charge_moonkin();
+    new spell_dru_thrash_bear();
 }

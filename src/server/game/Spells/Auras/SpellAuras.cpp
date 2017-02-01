@@ -707,6 +707,8 @@ void Aura::Update(uint32 diff, Unit* caster)
         if (m_duration < 0)
             m_duration = 0;
 
+        CallScriptAuraUpdateHandlers(diff);
+
         // handle manaPerSecond/manaPerSecondPerLevel
         if (m_timeCla)
         {
@@ -2040,6 +2042,33 @@ bool Aura::CallScriptEffectPeriodicHandlers(AuraEffect const* aurEff, AuraApplic
     }
 
     return preventDefault;
+}
+
+void Aura::CallScriptAuraUpdateHandlers(uint32 diff)
+{
+    for (auto scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end(); ++scritr)
+    {
+        (*scritr)->_PrepareScriptCall(AURA_SCRIPT_HOOK_ON_UPDATE);
+        auto effEndItr = (*scritr)->OnAuraUpdate.end(), effItr = (*scritr)->OnAuraUpdate.begin();
+        for (; effItr != effEndItr; ++effItr)
+            effItr->Call(*scritr, diff);
+
+        (*scritr)->_FinishScriptCall();
+    }
+}
+
+void Aura::CallScriptEffectUpdateHandlers(uint32 diff, AuraEffect *aurEff)
+{
+    for (auto scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end(); ++scritr)
+    {
+        (*scritr)->_PrepareScriptCall(AURA_SCRIPT_HOOK_EFFECT_UPDATE);
+        auto effEndItr = (*scritr)->OnEffectUpdate.end(), effItr = (*scritr)->OnEffectUpdate.begin();
+        for (; effItr != effEndItr; ++effItr)
+            if (effItr->IsEffectAffected(m_spellInfo, aurEff->GetEffIndex()))
+                effItr->Call(*scritr, diff, aurEff);
+
+        (*scritr)->_FinishScriptCall();
+    }
 }
 
 void Aura::CallScriptEffectUpdatePeriodicHandlers(AuraEffect* aurEff)

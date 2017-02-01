@@ -13,6 +13,10 @@
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
+# Enforce compileparameters for corebuilds under GCC
+# This to stop a few silly crashes that could have been avoided IF people
+# weren't doing some -O3 psychooptimizations etc.
+
 if(CMAKE_COMPILER_IS_GNUCXX AND NOT MINGW)
   add_definitions(-fno-delete-null-pointer-checks)
 endif()

@@ -453,7 +453,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      //392
     &AuraEffect::HandleNULL,                                      //393
     &AuraEffect::HandleShowConfirmationPrompt,                    //394 SPELL_AURA_SHOW_CONFIRMATION_PROMPT
-    &AuraEffect::HandleCreateAreaTrigger,                         //395 SPELL_AURA_AREA_TRIGGER
+    &AuraEffect::HandleNULL,                                      //395 SPELL_AURA_AREA_TRIGGER
     &AuraEffect::HandleNoImmediateEffect,                         //396 SPELL_AURA_PROC_ON_POWER_AMOUNT_2 implemented in Unit::HandleAuraProcOnPowerAmount
     &AuraEffect::HandleNULL,                                      //397
     &AuraEffect::HandleNULL,                                      //398
@@ -712,6 +712,42 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                 amount = caster->GetMap()->GetDifficultyID();
             m_canBeRecalculated = false;
             break;
+        case SPELL_AURA_MOD_INCREASE_HEALTH_PERCENT:
+        {
+            switch (GetId())
+            {
+                case 120954:// Fortifying Brew
+                {
+                    // Glyph of Fortifying Brew
+                    if (caster->HasAura(124997))
+                        amount = 10;
+
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            break;
+        }
+        case SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN:
+        {
+            switch (GetId())
+            {
+                case 120954:// Fortifying Brew
+                {
+                    // Glyph of Fortifying Brew
+                    if (caster->HasAura(124997))
+                        amount = 25;
+
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            break;
+        }
         default:
             break;
     }
@@ -981,6 +1017,10 @@ void AuraEffect::ApplySpellMod(Unit* target, bool apply)
 
 void AuraEffect::Update(uint32 diff, Unit* caster)
 {
+    auto baseAura = GetBase();
+    if (baseAura)
+        baseAura->CallScriptEffectUpdateHandlers(diff, this);
+
     if (m_isPeriodic && (GetBase()->GetDuration() >=0 || GetBase()->IsPassive() || GetBase()->IsPermanent()))
     {
         if (m_periodicTimer > int32(diff))
@@ -1471,7 +1511,19 @@ void AuraEffect::HandleModInvisibility(AuraApplication const* aurApp, uint8 mode
     {
         // apply glow vision
         if (target->GetTypeId() == TYPEID_PLAYER)
-            target->SetByteFlag(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_AURA_VISION, PLAYER_FIELD_BYTE2_INVISIBILITY_GLOW);
+        {
+            switch (GetId())
+            {
+                // Disable glow vision
+                case 108150: // Fire Crash Invis
+                case 108887: // Ox Cart Invisibility
+                case 105002: // Summon Hot Air Balloon
+                    break;
+                default:
+                    target->SetByteFlag(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_AURA_VISION, PLAYER_FIELD_BYTE2_INVISIBILITY_GLOW);
+                    break;
+            }
+        }
 
         target->m_invisibility.AddFlag(type);
         target->m_invisibility.AddValue(type, GetAmount());
@@ -6570,25 +6622,5 @@ void AuraEffect::HandlePlayScene(AuraApplication const* aurApp, uint8 mode, bool
     {
         SceneTemplate const* sceneTemplate = sObjectMgr->GetSceneTemplate(sceneId);
         player->GetSceneMgr().CancelSceneByPackageId(sceneTemplate->ScenePackageId);
-    }
-}
-
-void AuraEffect::HandleCreateAreaTrigger(AuraApplication const* aurApp, uint8 mode, bool apply) const
-{
-    if (!(mode & AURA_EFFECT_HANDLE_REAL))
-        return;
-
-    Unit* target = aurApp->GetTarget();
-
-    if (apply)
-    {
-        AreaTrigger* areaTrigger = new AreaTrigger();
-        if (!areaTrigger->CreateAreaTrigger(GetMiscValue(), GetCaster(), target, GetSpellInfo(), *target, GetBase()->GetDuration(), GetBase()->GetSpellXSpellVisualId()))
-            delete areaTrigger;
-    }
-    else
-    {
-        if (Unit* caster = GetCaster())
-            caster->RemoveAreaTrigger(GetSpellInfo()->Id);
     }
 }

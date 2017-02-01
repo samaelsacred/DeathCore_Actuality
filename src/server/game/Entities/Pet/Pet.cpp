@@ -324,9 +324,6 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petnumber, bool c
         _LoadSpellCooldowns();
         LearnPetPassives();
         InitLevelupSpellsForLevel();
-        if (map->IsBattleArena())
-            RemoveArenaAuras();
-
         CastPetAuras(current);
     }
 
@@ -900,6 +897,31 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
             SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - (petlevel / 4)));
             SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel + (petlevel / 4)));
 
+            switch (GetEntry())
+            {
+                case ENTRY_SPIRIT_WOLF:
+                    if (m_owner->HasAura(147783)) // Glyph of Spirit Raptors
+                        SetDisplayId(949); // Spirit... well, just a raptor
+                    else
+                        SetDisplayId(21114); // Water Elemental
+                    break;
+                case ENTRY_WATER_ELEMENTAL:
+                    if (m_owner->HasAura(146976)) // Glyph of the Unbound Elemental
+                        SetDisplayId(35383); // Unbound Elemental
+                    else
+                        SetDisplayId(525); // Water Elemental
+
+                    if (m_owner->HasAura(63090)) // Glyph of Water Elemental
+                        SetCreateHealth(m_owner->GetMaxHealth() / 1.4f); // Increases Health by 40%
+                    else
+                        SetCreateHealth(m_owner->GetMaxHealth() / 2);
+
+                    SetCreateMana(m_owner->GetMaxPower(POWER_MANA) / 2);
+                    SetBonusDamage(int32(m_owner->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_FROST)));
+                     break;
+                default:
+                    break;
+            }
             //SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, float(cinfo->attackpower));
             break;
         }
@@ -962,6 +984,12 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                     int32 bonus_dmg = int32(GetOwner()->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_SHADOW)* 0.3f);
                     SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float((petlevel * 4 - petlevel) + bonus_dmg));
                     SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float((petlevel * 4 + petlevel) + bonus_dmg));
+                    // Glyph of the Sha
+                    if (m_owner->HasAura(147776))
+                    {
+                        SetObjectScale(0.2f);
+                        SetDisplayId(41966);
+                    }
 
                     break;
                 }

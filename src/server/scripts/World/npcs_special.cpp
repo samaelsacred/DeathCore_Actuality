@@ -2372,6 +2372,81 @@ class npc_train_wrecker : public CreatureScript
         }
 };
 
+enum TranscendenceSpiritSpells
+{
+    SPELL_MEDITATE          = 124416,
+    SPELL_ROOT_FOR_EVER     = 31366,
+    SPELL_VISUAL_SPIRIT     = 119053,
+    SPELL_INITIALIZE_IMAGES = 102284,
+    SPELL_CLONE_CASTER      = 102288
+};
+
+enum transcendenceActions
+{
+    ACTION_TELEPORT = 1
+};
+
+class npc_transcendence_spirit : public CreatureScript
+{
+    public:
+        npc_transcendence_spirit() : CreatureScript("npc_transcendence_spirit") { }
+
+        struct npc_transcendence_spiritAI : public ScriptedAI
+        {
+            npc_transcendence_spiritAI(Creature* creature) : ScriptedAI(creature)
+            {
+                me->SetReactState(REACT_PASSIVE);
+            }
+
+            void Reset() override
+            {
+                me->CastSpell(me, SPELL_MEDITATE, true);
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL|UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_NON_ATTACKABLE);
+                me->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_DISABLE_TURN);
+            }
+
+            void IsSummonedBy(Unit* owner) override
+            {
+                if (!owner || owner->GetTypeId() != TYPEID_PLAYER)
+                    return;
+
+                me->SetMaxHealth(owner->GetMaxHealth() / 2);
+                me->SetHealth(me->GetMaxHealth());
+
+                me->CastSpell(me, SPELL_VISUAL_SPIRIT, true);
+                owner->CastSpell(me, SPELL_INITIALIZE_IMAGES, true);
+                owner->CastSpell(me, SPELL_CLONE_CASTER, true);
+                owner->AddAura(SPELL_MEDITATE, me);
+                me->AddAura(SPELL_ROOT_FOR_EVER, me);
+            }
+
+            void DoAction(int32 action) override
+            {
+                switch (action)
+                {
+                    case ACTION_TELEPORT:
+                    {
+                        if (Unit* owner = me->GetOwner())
+                        {
+                            Position pos = owner->GetPosition();
+                            owner->NearTeleportTo(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
+                            me->NearTeleportTo(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation());
+                        }
+
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+        };
+
+        CreatureAI* GetAI(Creature *creature) const override
+        {
+            return new npc_transcendence_spiritAI(creature);
+        }
+};
+
 void AddSC_npcs_special()
 {
     new npc_air_force_bots();
@@ -2395,4 +2470,5 @@ void AddSC_npcs_special()
     new npc_spring_rabbit();
     new npc_imp_in_a_ball();
     new npc_train_wrecker();
+    new npc_transcendence_spirit();
 }

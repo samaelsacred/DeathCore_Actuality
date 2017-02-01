@@ -16,7 +16,6 @@
  */
 
 #include "AuthenticationPackets.h"
-#include "CharacterTemplateDataStore.h"
 #include "HmacHash.h"
 
 bool WorldPackets::Auth::EarlyProcessClientPacket::ReadNoThrow()
@@ -110,13 +109,13 @@ WorldPacket const* WorldPackets::Auth::AuthResponse::Write()
         _worldPacket << uint32(SuccessInfo->CurrencyID);
         _worldPacket << int32(SuccessInfo->Time);
 
-        for (auto const& race : *SuccessInfo->AvailableRaces)
+        for (auto& race : *SuccessInfo->AvailableRaces)
         {
             _worldPacket << uint8(race.first); /// the current race
             _worldPacket << uint8(race.second); /// the required Expansion
         }
 
-        for (auto const& klass : *SuccessInfo->AvailableClasses)
+        for (auto& klass : *SuccessInfo->AvailableClasses)
         {
             _worldPacket << uint8(klass.first); /// the current class
             _worldPacket << uint8(klass.second); /// the required Expansion
@@ -144,7 +143,7 @@ WorldPacket const* WorldPackets::Auth::AuthResponse::Write()
         if (SuccessInfo->NumPlayersAlliance)
             _worldPacket << uint16(*SuccessInfo->NumPlayersAlliance);
 
-        for (auto const& virtualRealm : SuccessInfo->VirtualRealms)
+        for (auto& virtualRealm : SuccessInfo->VirtualRealms)
         {
             _worldPacket << uint32(virtualRealm.RealmAddress);
             _worldPacket.WriteBit(virtualRealm.IsLocal);
@@ -157,22 +156,22 @@ WorldPacket const* WorldPackets::Auth::AuthResponse::Write()
             _worldPacket.WriteString(virtualRealm.RealmNameNormalized);
         }
 
-        for (CharacterTemplate const* templat : SuccessInfo->Templates)
+        for (auto& templat : SuccessInfo->Templates)
         {
-            _worldPacket << uint32(templat->TemplateSetId);
-            _worldPacket << uint32(templat->Classes.size());
-            for (CharacterTemplateClass const& templateClass : templat->Classes)
+            _worldPacket << uint32(templat.TemplateSetId);
+            _worldPacket << uint32(templat.Classes.size());
+            for (auto& templateClass : templat.Classes)
             {
                 _worldPacket << uint8(templateClass.ClassID);
                 _worldPacket << uint8(templateClass.FactionGroup);
             }
 
-            _worldPacket.WriteBits(templat->Name.length(), 7);
-            _worldPacket.WriteBits(templat->Description.length(), 10);
+            _worldPacket.WriteBits(templat.Name.length(), 7);
+            _worldPacket.WriteBits(templat.Description.length(), 10);
             _worldPacket.FlushBits();
 
-            _worldPacket.WriteString(templat->Name);
-            _worldPacket.WriteString(templat->Description);
+            _worldPacket.WriteString(templat.Name);
+            _worldPacket.WriteString(templat.Description);
         }
     }
 

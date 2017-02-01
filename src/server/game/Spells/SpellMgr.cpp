@@ -2899,7 +2899,6 @@ void SpellMgr::LoadSpellInfoCustomAttributes()
         if (talentSpells.count(spellInfo->Id))
             spellInfo->AttributesCu |= SPELL_ATTR0_CU_IS_TALENT;
 
-
         spellInfo->_InitializeExplicitTargetMask();
     }
 
@@ -3142,6 +3141,9 @@ void SpellMgr::LoadSpellInfoCorrections()
             case 61719: // Easter Lay Noblegarden Egg Aura - Interrupt flags copied from aura which this aura is linked with
                 spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_HITBYSPELL | AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
                 break;
+            case 199737: // Fel Rush
+                spellInfo->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_LANDING;
+                break;
             case 71838: // Drain Life - Bryntroll Normal
             case 71839: // Drain Life - Bryntroll Heroic
                 spellInfo->AttributesEx2 |= SPELL_ATTR2_CANT_CRIT;
@@ -3154,6 +3156,7 @@ void SpellMgr::LoadSpellInfoCorrections()
             case 59630: // Black Magic
                 spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
                 break;
+            case 17364: // Stormstrike
             case 48278: // Paralyze
                 spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
                 break;
@@ -3165,13 +3168,6 @@ void SpellMgr::LoadSpellInfoCorrections()
             case 85123: // Siege Cannon (Tol Barad)
                 const_cast<SpellEffectInfo*>(spellInfo->GetEffect(EFFECT_0))->RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);
                 const_cast<SpellEffectInfo*>(spellInfo->GetEffect(EFFECT_0))->TargetA = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENTRY);
-                break;
-            case 198300: // Gathering Storms
-                spellInfo->ProcCharges = 1; // override proc charges, has 0 (unlimited) in db2
-                break;
-            case 42490: // Energized!
-            case 42492: // Cast Energized
-                spellInfo->AttributesEx |= SPELL_ATTR1_NO_THREAT;
                 break;
             // VIOLET HOLD SPELLS
             //
@@ -3463,8 +3459,53 @@ void SpellMgr::LoadSpellInfoCorrections()
                 break;
             // ENDOF ISLE OF CONQUEST SPELLS
             //
+            // The Wandering Isle Spells
+            case 107924: // Summon Pet
+                const_cast<SpellEffectInfo*>(spellInfo->GetEffect(EFFECT_1))->TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
+                break;
             case 102445: // Summon Master Li Fei
+            case 102499: // Fire Crash
+            case 118499: // Summon Aysa
+            case 118500: // Summon Ji
+            case 116190: // Summon Child 1
+            case 116191: // Summon Child 2
+            case 108786: // Summon Stack of Reeds
+            case 108827: // Summon Stack of Planks
+            case 108847: // Summon Stack of Blocks
+            case 108858: // Summon Tiger Stand
+            case 104450: // Summon Ji Yuan
+            case 104571: // Summon Aysa
                 const_cast<SpellEffectInfo*>(spellInfo->GetEffect(EFFECT_0))->TargetA = SpellImplicitTargetInfo(TARGET_DEST_DB);
+                break;
+            case 114710: // Forcecast Summon Amberleaf Troublemaker
+            case 118032: // Water Spout
+                spellInfo->MaxAffectedTargets = 1;
+                break;
+            case 109062: // Summon Lightning
+                spellInfo->CastTimeEntry = sSpellCastTimesStore.LookupEntry(1);
+                break;
+            case 102717: // Ride Vehicle
+                spellInfo->RecoveryTime = 0;
+                break;
+            case 108845: // Summon Jojo Ironbrow
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(4); // 120 seconds
+                break;
+            // End of The Wandering Isle Spells
+            //Monk spell
+            case 120954:// Fortifying Brew
+                const_cast<SpellEffectInfo*>(spellInfo->GetEffect(EFFECT_4))->ApplyAuraName = SPELL_AURA_MOD_INCREASE_HEALTH_PERCENT;
+                break;
+            case 115129:// Expel Harm - Damage to a nearby ennemy within 10 yards
+                spellInfo->MaxAffectedTargets = 0;
+                break;
+            // Monk Spell
+            case 126892: // Zen Pilgrimage
+            case 126895: // Zen Pilgrimage : Return
+                const_cast<SpellEffectInfo*>(spellInfo->GetEffect(EFFECT_0))->Effect = SPELL_EFFECT_DUMMY;
+                break;
+            case 142895: // Ring of Peace (dummy)
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(285);
+                spellInfo->AttributesEx5 |= SPELL_ATTR5_HIDE_DURATION;
                 break;
             default:
                 break;

@@ -901,11 +901,11 @@ namespace Trinity
     class AnyUnitInObjectRangeCheck
     {
         public:
-            AnyUnitInObjectRangeCheck(WorldObject const* obj, float range, bool check3D = true) : i_obj(obj), i_range(range), i_check3D(check3D) { }
+            AnyUnitInObjectRangeCheck(WorldObject const* obj, float range) : i_obj(obj), i_range(range) { }
 
             bool operator()(Unit* u) const
             {
-                if (u->IsAlive() && i_obj->IsWithinDistInMap(u, i_range, i_check3D))
+                if (u->IsAlive() && i_obj->IsWithinDistInMap(u, i_range))
                     return true;
 
                 return false;
@@ -914,7 +914,6 @@ namespace Trinity
         private:
             WorldObject const* i_obj;
             float i_range;
-            bool i_check3D;
     };
 
     // Success at unit in range, range update for next check (this can be use with UnitLastSearcher to find nearest unit)

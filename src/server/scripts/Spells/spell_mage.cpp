@@ -1442,6 +1442,79 @@ class spell_mage_water_elemental_freeze : public SpellScriptLoader
            return new spell_mage_water_elemental_freeze_SpellScript();
        }
 };
+enum GlyphOfIllusion
+{
+    MAGE_GLYPH_OF_ILLUSION_ACTIVE = 131784
+};
+
+class spell_mage_glyph_of_illusion : public SpellScriptLoader
+{
+public:
+    spell_mage_glyph_of_illusion() : SpellScriptLoader("spell_mage_glyph_of_illusion") { }
+
+    class spell_mage_glyph_of_illusion_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_mage_glyph_of_illusion_AuraScript);
+
+        void HandleEffectApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            GetCaster()->ToPlayer()->LearnSpell(MAGE_GLYPH_OF_ILLUSION_ACTIVE, false);
+        }
+
+        void HandleEffectRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            GetCaster()->ToPlayer()->RemoveSpell(MAGE_GLYPH_OF_ILLUSION_ACTIVE);
+        }
+
+        void Register() override
+        {
+            AfterEffectApply += AuraEffectApplyFn(spell_mage_glyph_of_illusion_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+            AfterEffectRemove += AuraEffectRemoveFn(spell_mage_glyph_of_illusion_AuraScript::HandleEffectRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+        }
+    };
+
+    AuraScript* GetAuraScript() const override
+    {
+        return new spell_mage_glyph_of_illusion_AuraScript();
+    }
+};
+
+enum GlyphOfConjureFamiliar
+{
+    MAGE_GLYPH_OF_CONJURE_FAMILIAR_ACTIVE = 126578
+};
+
+class spell_mage_glyph_of_conjure_familiar : public SpellScriptLoader
+{
+public:
+    spell_mage_glyph_of_conjure_familiar() : SpellScriptLoader("spell_mage_glyph_of_conjure_familiar") { }
+
+    class spell_mage_glyph_of_conjure_familiar_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_mage_glyph_of_conjure_familiar_AuraScript);
+
+        void HandleEffectApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            GetCaster()->ToPlayer()->LearnSpell(MAGE_GLYPH_OF_CONJURE_FAMILIAR_ACTIVE, false);
+        }
+
+        void HandleEffectRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            GetCaster()->ToPlayer()->RemoveSpell(MAGE_GLYPH_OF_CONJURE_FAMILIAR_ACTIVE);
+        }
+
+        void Register() override
+        {
+            AfterEffectApply += AuraEffectApplyFn(spell_mage_glyph_of_conjure_familiar_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+            AfterEffectRemove += AuraEffectRemoveFn(spell_mage_glyph_of_conjure_familiar_AuraScript::HandleEffectRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+        }
+    };
+
+    AuraScript* GetAuraScript() const override
+    {
+        return new spell_mage_glyph_of_conjure_familiar_AuraScript();
+    }
+};
 
 void AddSC_mage_spell_scripts()
 {
@@ -1472,4 +1545,6 @@ void AddSC_mage_spell_scripts()
     new spell_mage_ring_of_frost_freeze();
     new spell_mage_time_warp();
     new spell_mage_water_elemental_freeze();
+    new spell_mage_glyph_of_illusion();
+    new spell_mage_glyph_of_conjure_familiar();
 }

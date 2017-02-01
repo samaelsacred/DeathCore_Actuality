@@ -1438,6 +1438,41 @@ class spell_warl_unstable_affliction : public SpellScriptLoader
         }
 };
 
+class spell_warl_shadowburn_damage : public SpellScriptLoader
+{
+public:
+    spell_warl_shadowburn_damage() : SpellScriptLoader("spell_warl_shadowburn_damage") { }
+
+    class spell_warl_shadowburn_damage_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_warl_shadowburn_damage_SpellScript);
+
+        void HandleOnHit()
+        {
+            if (Unit* caster = GetCaster())
+            {
+                int32 damage = GetHitDamage();
+
+                // Mastery: Emberstorm
+                if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 2129, EFFECT_0))
+                    AddPct(damage, aurEff->GetAmount());
+
+                SetHitDamage(damage);
+            }
+        }
+
+        void Register() override
+        {
+            OnHit += SpellHitFn(spell_warl_shadowburn_damage_SpellScript::HandleOnHit);
+        }
+    };
+
+    SpellScript* GetSpellScript() const override
+    {
+        return new spell_warl_shadowburn_damage_SpellScript();
+    }
+};
+
 void AddSC_warlock_spell_scripts()
 {
     new spell_warl_aftermath();
@@ -1471,4 +1506,5 @@ void AddSC_warlock_spell_scripts()
     new spell_warl_soul_swap_override();
     new spell_warl_soulshatter();
     new spell_warl_unstable_affliction();
+    new spell_warl_shadowburn_damage();
 }

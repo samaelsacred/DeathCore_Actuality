@@ -12,6 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
+
 if (NOT MYSQL_FOUND)
   message(FATAL_ERROR "MySQL wasn't found on your system but it's required to build the servers!")
 endif()

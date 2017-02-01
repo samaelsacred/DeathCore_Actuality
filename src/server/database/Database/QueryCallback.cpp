@@ -17,10 +17,10 @@
 
 #include "QueryCallback.h"
 
-template<typename T, typename... Args>
-inline void Construct(T& t, Args&&... args)
+template<typename T>
+inline void Construct(T& t)
 {
-    new (&t) T(std::forward<Args>(args)...);
+    new (&t) T();
 }
 
 template<typename T>
@@ -103,17 +103,12 @@ private:
     bool _isPrepared;
 };
 
-// Not using initialization lists to work around segmentation faults when compiling with clang without precompiled headers
-QueryCallback::QueryCallback(std::future<QueryResult>&& result)
+QueryCallback::QueryCallback(std::future<QueryResult>&& result) : _string(std::move(result)), _isPrepared(false)
 {
-    _isPrepared = false;
-    Construct(_string, std::move(result));
 }
 
-QueryCallback::QueryCallback(std::future<PreparedQueryResult>&& result)
+QueryCallback::QueryCallback(std::future<PreparedQueryResult>&& result) : _prepared(std::move(result)), _isPrepared(true)
 {
-    _isPrepared = true;
-    Construct(_prepared, std::move(result));
 }
 
 QueryCallback::QueryCallback(QueryCallback&& right)

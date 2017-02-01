@@ -34,7 +34,6 @@ enum ShamanSpells
 {
     SPELL_SHAMAN_ANCESTRAL_GUIDANCE             = 108281,
     SPELL_SHAMAN_ANCESTRAL_GUIDANCE_HEAL        = 114911,
-    SPELL_SHAMAN_CRASH_LIGHTNING_CLEAVE         = 187878,
     SPELL_SHAMAN_EARTH_SHIELD_HEAL              = 204290,
     SPELL_SHAMAN_EARTHEN_RAGE_PASSIVE           = 170374,
     SPELL_SHAMAN_EARTHEN_RAGE_PERIODIC          = 170377,
@@ -48,8 +47,6 @@ enum ShamanSpells
     SPELL_SHAMAN_FLAME_SHOCK                    = 8050,
     SPELL_SHAMAN_FLAME_SHOCK_MAELSTROM          = 188389,
     SPELL_SHAMAN_FLAMETONGUE_ATTACK             = 10444,
-    SPELL_SHAMAN_GATHERING_STORMS               = 198299,
-    SPELL_SHAMAN_GATHERING_STORMS_BUFF          = 198300,
     SPELL_SHAMAN_HIGH_TIDE                      = 157154,
     SPELL_SHAMAN_ITEM_LIGHTNING_SHIELD          = 23552,
     SPELL_SHAMAN_ITEM_LIGHTNING_SHIELD_DAMAGE   = 27635,
@@ -61,7 +58,8 @@ enum ShamanSpells
     SPELL_SHAMAN_PATH_OF_FLAMES_TALENT          = 201909,
     SPELL_SHAMAN_SATED                          = 57724,
     SPELL_SHAMAN_TIDAL_WAVES                    = 53390,
-    SPELL_SHAMAN_WINDFURY_ATTACK                = 25504
+    SPELL_SHAMAN_WINDFURY_ATTACK                = 25504,
+    SPELL_SHAMAN_RAIN_OF_FROGS                  = 147709
 };
 
 enum MiscSpells
@@ -195,51 +193,6 @@ class spell_sha_bloodlust : public SpellScriptLoader
         {
             return new spell_sha_bloodlust_SpellScript();
         }
-};
-
-// 187874 - Crash Lightning
-class spell_sha_crash_lightning : public SpellScriptLoader
-{
-public:
-    spell_sha_crash_lightning() : SpellScriptLoader("spell_sha_crash_lightning") { }
-
-    class spell_sha_crash_lightning_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_sha_crash_lightning_SpellScript);
-
-        bool Validate(SpellInfo const* /*spellInfo*/) override
-        {
-            if (!sSpellMgr->GetSpellInfo(SPELL_SHAMAN_CRASH_LIGHTNING_CLEAVE))
-                return false;
-            return true;
-        }
-
-        void CountTargets(std::list<WorldObject*>& targets)
-        {
-            _targetsHit = targets.size();
-        }
-
-        void TriggerCleaveBuff()
-        {
-            if (_targetsHit >= 2)
-                GetCaster()->CastSpell(GetCaster(), SPELL_SHAMAN_CRASH_LIGHTNING_CLEAVE, true);
-            if (AuraEffect const* gatheringStorms = GetCaster()->GetAuraEffect(SPELL_SHAMAN_GATHERING_STORMS, EFFECT_0))
-                GetCaster()->CastCustomSpell(SPELL_SHAMAN_GATHERING_STORMS_BUFF, SPELLVALUE_BASE_POINT0, int32(gatheringStorms->GetAmount() * _targetsHit), GetCaster(), true);
-        }
-
-        void Register() override
-        {
-            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_crash_lightning_SpellScript::CountTargets, EFFECT_0, TARGET_UNIT_CONE_ENEMY_104);
-            AfterCast += SpellCastFn(spell_sha_crash_lightning_SpellScript::TriggerCleaveBuff);
-        }
-
-        size_t _targetsHit = 0;
-    };
-
-    SpellScript* GetSpellScript() const override
-    {
-        return new spell_sha_crash_lightning_SpellScript();
-    }
 };
 
 // 204288 - Earth Shield
@@ -978,12 +931,83 @@ public:
     }
 };
 
+class spell_sha_glyph_rain_of_frogs : public SpellScriptLoader
+{
+public:
+    spell_sha_glyph_rain_of_frogs() : SpellScriptLoader("spell_sha_glyph_rain_of_frogs") { }
+
+    class spell_sha_glyph_rain_of_frogs_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_sha_glyph_rain_of_frogs_AuraScript);
+
+        void OnApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            if (Player* _player = GetTarget()->ToPlayer())
+                _player->LearnSpell(SPELL_SHAMAN_RAIN_OF_FROGS, false);
+        }
+
+        void OnRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            if (Player* _player = GetTarget()->ToPlayer())
+                if (_player->HasSpell(SPELL_SHAMAN_RAIN_OF_FROGS))
+                    _player->RemoveSpell(SPELL_SHAMAN_RAIN_OF_FROGS, false, false);
+        }
+
+        void Register() override
+        {
+            OnEffectApply += AuraEffectApplyFn(spell_sha_glyph_rain_of_frogs_AuraScript::OnApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+            OnEffectRemove += AuraEffectRemoveFn(spell_sha_glyph_rain_of_frogs_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+        }
+    };
+
+    AuraScript* GetAuraScript() const override
+    {
+        return new spell_sha_glyph_rain_of_frogs_AuraScript();
+    }
+};
+
+// Molten Earth damage - 170379
+class spell_sha_molten_earth_damage : public SpellScriptLoader
+{
+    public:
+        spell_sha_molten_earth_damage() : SpellScriptLoader("spell_sha_molten_earth_damage") { }
+
+        class spell_sha_molten_earth_damage_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_sha_molten_earth_damage_SpellScript);
+
+            void HandleOnHit()
+            {
+                Unit* caster = GetCaster();
+                float mastery = 0.0f;
+                float spellPower = caster->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_ALL);
+
+                if (AuraEffect* auraEff = caster->GetAuraEffect(SPELL_SHAMAN_EARTHEN_RAGE_PASSIVE, EFFECT_0))
+                    mastery = auraEff->GetAmount();
+
+                int32 damage = (mastery / 100) * spellPower;
+
+                SetHitDamage(damage);
+            }
+
+
+            void Register() override
+            {
+                OnHit += SpellHitFn(spell_sha_molten_earth_damage_SpellScript::HandleOnHit);
+            }
+        };
+
+        SpellScript* GetSpellScript() const override
+        {
+            return new spell_sha_molten_earth_damage_SpellScript;
+        }
+};
+
 void AddSC_shaman_spell_scripts()
 {
     new spell_sha_ancestral_guidance();
     new spell_sha_ancestral_guidance_heal();
     new spell_sha_bloodlust();
-    new spell_sha_crash_lightning();
     new spell_sha_earth_shield();
     new spell_sha_earthen_rage_passive();
     new spell_sha_earthen_rage_proc_aura();
@@ -1003,4 +1027,6 @@ void AddSC_shaman_spell_scripts()
     new spell_sha_path_of_flames_spread();
     new spell_sha_tidal_waves();
     new spell_sha_windfury();
+    new spell_sha_glyph_rain_of_frogs();
+    new spell_sha_molten_earth_damage();
 }
