@@ -92,7 +92,7 @@ class boss_oondasta : public CreatureScript
                 me->SetReactState(REACT_AGGRESSIVE);
             }
 
-            void EnterCombat(Unit* attacker) override
+            void EnterCombat(Unit* /*attacker*/) override
             {
                 me->AddAura(SPELL_ALPHA_MALE, me);
 

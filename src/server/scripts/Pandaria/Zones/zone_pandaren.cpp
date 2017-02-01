@@ -1374,7 +1374,7 @@ public:
             case 19:
                 if (me->GetVehicleKit())
                 {
-                    if (Unit* passenger = me->GetVehicleKit()->GetPassenger(1))
+                    if (Unit* /*passenger*/ = me->GetVehicleKit()->GetPassenger(1))
                         if (Player* player = passenger->ToPlayer())
                         {
                             player->KilledMonsterCredit(55939);

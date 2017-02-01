@@ -669,6 +669,7 @@ void Transport::DelayedTeleportTransport()
                     RemovePassenger(obj);
                 break;
             case TYPEID_DYNAMICOBJECT:
+            case TYPEID_AREATRIGGER:
                 obj->AddObjectToRemoveList();
                 break;
             default:
@@ -723,6 +724,9 @@ void Transport::UpdatePassengerPositions(PassengerSet& passengers)
                 break;
             case TYPEID_DYNAMICOBJECT:
                 GetMap()->DynamicObjectRelocation(passenger->ToDynObject(), x, y, z, o);
+                break;
+            case TYPEID_AREATRIGGER:
+                GetMap()->AreaTriggerRelocation(passenger->ToAreaTrigger(), x, y, z, o);
                 break;
             default:
                 break;

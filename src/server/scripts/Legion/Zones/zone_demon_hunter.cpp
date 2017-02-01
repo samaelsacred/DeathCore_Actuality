@@ -123,7 +123,7 @@ public:
                 }
         }
 
-        void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/) override { }
+        void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/) override
         {
         }
 
