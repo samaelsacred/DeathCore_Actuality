@@ -1371,7 +1371,7 @@ class spell_druid_natures_vigil : public SpellScriptLoader
         {
             PrepareAuraScript(spell_druid_natures_vigil_AuraScript);
 
-            void OnProc(const AuraEffect/* aurEff*/, ProcEventInfo& eventInfo)
+            void OnProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
             {
                 PreventDefaultAction();
 

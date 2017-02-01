@@ -54,7 +54,7 @@ class spell_dh_chaos_strike : public SpellScriptLoader
                 return true;
             }
 
-            void HandleEffectProc(AuraEffect const/* aurEff*/, ProcEventInfo& /*eventInfo*/)
+            void HandleEffectProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
             {
                 if (Unit* caster = GetCaster())
                     caster->CastCustomSpell(SPELL_CHAOS_STRIKE_PROC, SPELLVALUE_BASE_POINT0, aurEff->GetBaseAmount(), caster);
