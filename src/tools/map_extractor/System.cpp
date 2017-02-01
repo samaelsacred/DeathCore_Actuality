@@ -1157,14 +1157,6 @@ char const* GetCascFilenamePart(char const* cascPath)
 
     return cascPath;
 }
- 
-char const* GetCascFilenamePart(char const* cascPath)
-{
-    if (char const* lastSep = strrchr(cascPath, '\\'))
-        return lastSep + 1;
-
-    return cascPath;
-}
 
 void ExtractDBFilesClient(int l)
 {
