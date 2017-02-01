@@ -20,5 +20,5 @@
 
 void AddSC_boss_oondasta()
 {
-	new boss_oondasta();
+
 }

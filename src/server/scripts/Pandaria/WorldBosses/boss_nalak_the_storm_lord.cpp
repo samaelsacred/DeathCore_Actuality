@@ -20,5 +20,5 @@
 
 void AddSC_boss_nalak_the_storm_lord()
 {
-	new npc_boss_nalak();
+
 }

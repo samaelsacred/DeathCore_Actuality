@@ -631,7 +631,7 @@ class spell_monk_ring_of_peace : public SpellScriptLoader
         {
             PrepareAuraScript(spell_monk_ring_of_peace_AuraScript);
 
-            void OnUpdate(uint32 diff)
+            void OnUpdate(uint32 /*diff*/)
             {
                 if (Unit* caster = GetCaster())
                 {

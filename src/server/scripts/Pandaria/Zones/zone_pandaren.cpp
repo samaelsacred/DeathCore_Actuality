@@ -1301,7 +1301,7 @@ class go_wandering_weapon_rack : public GameObjectScript
 public:
     go_wandering_weapon_rack() : GameObjectScript("go_wandering_weapon_rack") { }
 
-    bool OnGossipHello(Player* player, GameObject* go)
+    bool OnGossipHello(Player* player, GameObject/* go*/)
     {
         if (player->GetQuestStatus(30027) == QUEST_STATUS_INCOMPLETE && (!player->HasItemCount(77279) || !player->HasItemCount(77278)))
         {

@@ -483,7 +483,7 @@ class spell_dk_death_coil : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* target = GetHitUnit())
+                if (Unit/* target*/ = GetHitUnit())
                 {
                     if (caster->IsFriendlyTo(target))
                     {
@@ -564,7 +564,7 @@ class spell_dk_death_gate : public SpellScriptLoader
             void HandleScript(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                if (Unit* target = GetHitUnit())
+                if (Unit/* target*/ = GetHitUnit())
                     target->CastSpell(target, GetEffectValue(), false);
             }
 
@@ -595,7 +595,7 @@ class spell_dk_death_grip : public SpellScriptLoader
             {
                 int32 damage = GetEffectValue();
                 Position const* pos = GetExplTargetDest();
-                if (Unit* target = GetHitUnit())
+                if (Unit/* target*/ = GetHitUnit())
                 {
                     if (!target->HasAuraType(SPELL_AURA_DEFLECT_SPELLS)) // Deterrence
                         target->CastSpell(pos->GetPositionX(), pos->GetPositionY(), pos->GetPositionZ(), damage, true);
@@ -1301,7 +1301,7 @@ class spell_dk_gorefiends_grasp : public SpellScriptLoader
             {
                 if (Unit* _unit = GetCaster()->ToUnit())
                 {
-                    if (Unit* target = GetHitUnit())
+                    if (Unit/* target*/ = GetHitUnit())
                     {
                         std::list<Unit*> TargetList;
                         Trinity::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 20.0f);
