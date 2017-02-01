@@ -1,3 +1,3 @@
-UPDATE `version` SET `db_version`='TDB 703.00', `cache_id`=5 LIMIT 1;
+UPDATE `version` SET `db_version`='PLDB 0.0.3', `cache_id`=5 LIMIT 1;
 
 UPDATE `updates` SET `state`='ARCHIVED';
