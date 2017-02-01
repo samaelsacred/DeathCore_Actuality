@@ -127,7 +127,7 @@ public:
         {
         }
 
-        void UpdateAI(uint32 diff) override
+        void UpdateAI(uint32 /*diff*/) override
         {
         }
     };
@@ -187,7 +187,7 @@ public:
         {
         }
 
-        void UpdateAI(uint32 diff) override
+        void UpdateAI(uint32 /*diff*/) override
         {
         }
     };
@@ -263,7 +263,7 @@ public:
         {
         }
 
-        void UpdateAI(uint32 diff) override
+        void UpdateAI(uint32 /*diff*/) override
         {
         }
     };
@@ -323,7 +323,7 @@ public:
         {
         }
 
-        void UpdateAI(uint32 diff) override
+        void UpdateAI(uint32 /*diff*/) override
         {
         }
     };
@@ -370,7 +370,7 @@ public:
         {
         }
 
-        void UpdateAI(uint32 diff) override
+        void UpdateAI(uint32 /*diff*/) override
         {
         }
     };
@@ -424,7 +424,7 @@ public:
                 }
         }
 
-        void UpdateAI(uint32 diff) override
+        void UpdateAI(uint32 /*diff*/) override
         {
             // Totaly missing yet
             if (!UpdateVictim())
@@ -485,7 +485,7 @@ public:
                 }
         }
 
-        void UpdateAI(uint32 diff) override
+        void UpdateAI(uint32 /*diff*/) override
         {
             // Totaly missing yet
             if (!UpdateVictim())

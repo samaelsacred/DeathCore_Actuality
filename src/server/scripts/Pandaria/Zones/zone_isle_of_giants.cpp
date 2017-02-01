@@ -103,7 +103,7 @@ class boss_oondasta : public CreatureScript
                 events.ScheduleEvent(EVENT_SPIRITFIRE_BEAM, urand(10000, 15000));
             }
 
-            void JustDied(Unit* killer) override
+            void JustDied(Unit* /*killer*/) override
             {
                 events.Reset();
             }
