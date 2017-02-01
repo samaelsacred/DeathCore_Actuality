@@ -2,15 +2,15 @@
 -- Blood elf starting area (Sunstrider Isle)
 
 -- The following NPCs are no longer quest givers:
--- UPDATE `creature_template` SET `npcflag` = `npcflag`& ~2 WHERE `entry` IN
--- (15279,  -- Julia Sunstriker <Mage Trainer>
--- 15280,  -- Jesthenis Sunstriker <Paladin Trainer>
--- 15283,  -- Summoner Teli'Larien <Warlock Trainer>
--- 15284,  -- Matron Arena <Priest Trainer>
--- 15285,  -- Pathstalker Kariel <Rogue Trainer>
--- 15513,  -- Ranger Sallina <Hunter Trainer>
--- 43010,  -- Delios Silverblade <Warrior Trainer>
--- 63332); -- Pao <Monk Trainer>
+UPDATE `creature_template` SET `npcflag` = `npcflag`& ~2 WHERE `entry` IN
+(15279,  -- Julia Sunstriker <Mage Trainer>
+ 15280,  -- Jesthenis Sunstriker <Paladin Trainer>
+ 15283,  -- Summoner Teli'Larien <Warlock Trainer>
+ 15284,  -- Matron Arena <Priest Trainer>
+ 15285,  -- Pathstalker Kariel <Rogue Trainer>
+ 15513,  -- Ranger Sallina <Hunter Trainer>
+ 43010,  -- Delios Silverblade <Warrior Trainer>
+ 63332); -- Pao <Monk Trainer>
 
 -- Magistrix Erona (15278) no longer starts these quests:
 DELETE FROM `creature_queststarter` WHERE `id`= 15278 AND `quest` IN
