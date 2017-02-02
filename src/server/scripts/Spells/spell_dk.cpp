@@ -1301,7 +1301,7 @@ class spell_dk_gorefiends_grasp : public SpellScriptLoader
             {
                 if (Unit* _unit = GetCaster()->ToUnit())
                 {
-                    if (Unit* /*target*/ = GetHitUnit())
+                    if (Unit* target = GetHitUnit())
                     {
                         std::list<Unit*> TargetList;
                         Trinity::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 20.0f);

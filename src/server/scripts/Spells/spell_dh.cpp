@@ -168,7 +168,7 @@ public:
             return true;
         }
 
-        void HandleEffectProc(AuraEffect const/* aurEff*/, ProcEventInfo& /*eventInfo*/)
+        void HandleEffectProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
         {
             if (Unit* caster = GetCaster())
                 caster->CastSpell(caster->GetVictim(), SPELL_DEMON_BLADES_PROC, true);
