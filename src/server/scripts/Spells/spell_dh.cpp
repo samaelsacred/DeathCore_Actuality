@@ -25,16 +25,14 @@
 #include "SpellAuraEffects.h"
 #include "ScriptMgr.h"
 #include "GridNotifiers.h"
-#include "SpellScript.h"
-#include "Unit.h"
 
 enum DemonHunterSpells
 {
     SPELL_FEL_RUSH_GROUND   = 197922,
     SPELL_FEL_RUSH_AIR      = 197923,
     SPELL_FEL_RUSH_DAMAGE   = 192611,
+
     SPELL_CHAOS_STRIKE_PROC = 193840,
-    SPELL_DEMON_BLADES_PROC = 203796
 };
 
 // 197125 - Chaos Strike
@@ -151,44 +149,9 @@ class spell_dh_fel_rush_aura : public SpellScriptLoader
         }
 };
 
-// 203555 - Demon Blades
-class spell_dh_demon_blades : public SpellScriptLoader
-{
-public:
-    spell_dh_demon_blades() : SpellScriptLoader("spell_dh_demon_blades") { }
-
-    class spell_dh_demon_blades_AuraScript : public AuraScript
-    {
-        PrepareAuraScript(spell_dh_demon_blades_AuraScript);
-
-        bool Validate(SpellInfo const* /*spellInfo*/) override
-        {
-            if (!sSpellMgr->GetSpellInfo(SPELL_DEMON_BLADES_PROC))
-                return false;
-            return true;
-        }
-
-        void HandleEffectProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
-        {
-            if (Unit* caster = GetCaster())
-                caster->CastSpell(caster->GetVictim(), SPELL_DEMON_BLADES_PROC, true);
-        }
-
-        void Register() override
-        {
-            OnEffectProc += AuraEffectProcFn(spell_dh_demon_blades_AuraScript::HandleEffectProc, EFFECT_0, SPELL_AURA_DUMMY);
-        }
-    };
-    AuraScript* GetAuraScript() const override
-    {
-        return new spell_dh_demon_blades_AuraScript();
-    }
-}; 
-
 void AddSC_demon_hunter_spell_scripts()
 {
     new spell_dh_chaos_strike();
     new spell_dh_fel_rush();
     new spell_dh_fel_rush_aura();
-    new spell_dh_demon_blades();
 }
