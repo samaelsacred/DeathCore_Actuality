@@ -1399,7 +1399,8 @@ public:
                 {
                     if (me->GetVehicleKit())
                     {
-                        if (Unit* passenger = me->GetVehicleKit()->GetPassenger(1))
+                    if (Unit* passenger = me->GetVehicleKit()->GetPassenger(1))
+                        if (Player* player = passenger->ToPlayer())
                         {
                             Start(false, true);
                             IntroTimer = 0;
