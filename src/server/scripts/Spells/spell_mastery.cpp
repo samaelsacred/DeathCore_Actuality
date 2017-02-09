@@ -96,7 +96,7 @@ class spell_mastery_unshackled_fury : public SpellScriptLoader
         {
             PrepareAuraScript(spell_mastery_unshackled_fury_AuraScript);
 
-            void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & /*canBeRecalculated*/)
+            void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
             {
                 if (Unit* caster = GetCaster()->ToPlayer())
                 {
