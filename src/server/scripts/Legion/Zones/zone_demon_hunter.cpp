@@ -183,7 +183,7 @@ public:
                 }
         }
 
-        void SpellHit(Unit* Caster, const SpellInfo* Spell) override
+        void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/) override
         {
         }
 
@@ -259,7 +259,7 @@ public:
             }
         }
 
-        void SpellHit(Unit* Caster, const SpellInfo* Spell) override
+                void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/) override
         {
         }
 
@@ -319,7 +319,7 @@ public:
             }
         }
 
-        void SpellHit(Unit* Caster, const SpellInfo* Spell) override
+                void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/) override
         {
         }
 
@@ -366,7 +366,7 @@ public:
             }
         }
 
-        void SpellHit(Unit* Caster, const SpellInfo* Spell) override
+                void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/) override
         {
         }
 
@@ -406,7 +406,7 @@ public:
             Talk(CREATURE_TEXT_ZERO);
         }
 
-        void SpellHit(Unit* Caster, const SpellInfo* Spell) override
+                void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/) override
         {
         }
 
@@ -468,7 +468,7 @@ public:
             Talk(CREATURE_TEXT_ZERO);
         }
 
-        void SpellHit(Unit* Caster, const SpellInfo* Spell) override
+                void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/) override
         {
         }
 
