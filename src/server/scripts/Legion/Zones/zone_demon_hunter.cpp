@@ -356,9 +356,9 @@ public:
 
         void EnterCombat(Unit* /*who*/) override { }
 
-        void sGossipSelect(Player* player, /*uint32 menuId*/, uint32 gossipListId) override
+        void sGossipSelect(Player* player, uint32 menuId, uint32 gossipListId) override
         {
-            if (gossipListId == 0)
+            if (menuId == 19134 && gossipListId == 0)
             {
                 player->CLOSE_GOSSIP_MENU();
                 // Personal Spawn Part Missing

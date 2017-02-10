@@ -167,7 +167,7 @@ class spell_mastery_combo_breaker : public SpellScriptLoader
             {
                 if (Unit* caster = GetCaster())
                 {
-                    if (Unit* target = GetHitUnit())
+                    if (Unit* caster = GetHitUnit())
                     {
 						if (caster->GetTypeId() == TYPEID_PLAYER && caster->HasAura(MASTERY_MONK_WINDWALKER))
                         {
@@ -212,7 +212,7 @@ class spell_mastery_blood_shield : public SpellScriptLoader
             {
                 if (Player* _plr = GetCaster()->ToPlayer())
                 {
-                    if (Unit* target = GetHitUnit())
+                    if (Unit* _plr = GetHitUnit())
                     {
                         if (_plr->GetTypeId() == TYPEID_PLAYER && _plr->HasAura(77513) && _plr->getLevel() >= 80)
                         {
@@ -265,7 +265,7 @@ class spell_mastery_ignite : public SpellScriptLoader
             {
                 if (Unit* caster = GetCaster())
                 {
-                    if (Unit* target = GetHitUnit())
+                    if (Unit* caster = GetHitUnit())
                     {
                         if (caster->GetTypeId() == TYPEID_PLAYER && caster->HasAura(12846) && caster->getLevel() >= 80)
                         {
@@ -317,7 +317,7 @@ class spell_mastery_hand_of_light : public SpellScriptLoader
             {
                 if (Unit* caster = GetCaster())
                 {
-                    if (Unit* target = GetHitUnit())
+                    if (Unit* caster = GetHitUnit())
                     {
                         if (caster->GetTypeId() == TYPEID_PLAYER && caster->HasAura(76672) && caster->getLevel() >= 80)
                         {
