@@ -608,7 +608,7 @@ public:
         else
             return;
     }
-    void OnSceneTriggerEvent(Player* player, uint32 /*sceneInstanceID*/, SceneTemplate const* /*sceneTemplate*/, std::string const& triggerName) override
+    void OnSceneTriggerEvent(Player* /*player*/, uint32 /*sceneInstanceID*/, SceneTemplate const* /*sceneTemplate*/, std::string const& triggerName) override
     {
         if (triggerName == "CUEILLIDANTH")
             // Illidan Conversation
