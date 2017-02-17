@@ -20,6 +20,8 @@
 	//Zone Tanaan Jungle
 void AddSC_tanaan_jungle();
 
+	// Garrison Frostwall
+void AddSC_Garrison_Frostwall();
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
@@ -27,4 +29,7 @@ void AddDraenorScripts()
 {
 	//Zone Tanaan Jungle
 	AddSC_tanaan_jungle();
+	
+	// Garrison Frostwall
+	AddSC_Garrison_Frostwall();
 }
