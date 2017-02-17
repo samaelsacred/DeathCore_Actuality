@@ -47,10 +47,10 @@ Read file [COPYING](COPYING)
 
 This project is brought to you thanks to:
 
-- All team  [DeathCore desenvolvedores, programadores e contribuintes](https://github.com/NoffearrDeathProjecT/DeathCore/graphs/contributors)
-- All team [WoWSource desenvolvedores, programadores e contribuintes](http://wowsource.info/)
-- All team [TrinityCore desenvolvedores, programadores e contribuintes](https://github.com/TrinityCore/TrinityCore/blob/3.3.5/THANKS)
-- All team [MaNGOS, ScriptDev2 and UDB desenvolvedores, programadores e contribuintes](https://github.com/cmangos/mangos-wotlk/blob/master/AUTHORS.md)
+- All team  [DeathCore developers, programmers and contributors](https://github.com/NoffearrDeathProjecT/DeathCore/graphs/contributors)
+- All team [WoWSource developers, programmers and contributors](http://wowsource.info/)
+- All team [TrinityCore developers, programmers and contributors](https://github.com/TrinityCore/TrinityCore/blob/3.3.5/THANKS)
+- All team [MaNGOS, ScriptDev2 and UDB developers, programmers and contributors](https://github.com/cmangos/mangos-wotlk/blob/master/AUTHORS.md)
 
 
 ## Links
