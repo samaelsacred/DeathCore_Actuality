@@ -39,6 +39,14 @@ namespace Movement
         FacingInfo() : angle(0.0f), type(MONSTER_MOVE_NORMAL) { }
     };
 
+    struct SpellEffectExtraData
+    {
+        ObjectGuid Target;
+        uint32 SpellVisualId = 0;
+        uint32 ProgressCurveId = 0;
+        uint32 ParabolicCurveId = 0;
+    };
+
     struct MoveSplineInitArgs
     {
         MoveSplineInitArgs(size_t path_capacity = 16) : path_Idx_offset(0), velocity(0.f),
@@ -57,6 +65,7 @@ namespace Movement
         float time_perc;
         uint32 splineId;
         float initialOrientation;
+        Optional<SpellEffectExtraData> spellEffectExtra;
         bool HasVelocity;
         bool TransformForTransport;
 
