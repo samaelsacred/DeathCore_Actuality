@@ -246,14 +246,14 @@ public:
         {
             if (menuId == 19133 && gossipListId == 0)
             {
-                player->CLOSE_GOSSIP_MENU();
+                CloseGossipMenuFor(player);
                 // Personal Spawn Part Missing
                 player->CastSpell(me->ToCreature(), SPELL_SACRIFICING_SEVIS);
             }
 
             if (menuId == 19132 && gossipListId == 0)
             {
-                player->CLOSE_GOSSIP_MENU();
+                CloseGossipMenuFor(player);
                 // Personal Spawn Part Missing
                 player->CastSpell(player, SPELL_SEVIS_SACRIFICE_ME);
             }
@@ -360,7 +360,7 @@ public:
         {
             if (menuId == 19134 && gossipListId == 0)
             {
-                player->CLOSE_GOSSIP_MENU();
+                CloseGossipMenuFor(player);
                 // Personal Spawn Part Missing
                 player->CastSpell(player, SPELL_SACRIFICING_MYSTICS_SOUL);
             }
