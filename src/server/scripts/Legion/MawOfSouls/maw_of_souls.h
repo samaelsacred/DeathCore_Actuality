@@ -15,34 +15,36 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// This is where scripts' loading functions should be declared:
-	
-	//Zone Demon Hunter
-void AddSC_zone_demon_hunter();
+#ifndef MAW_OF_SOULS_H_
+#define MAW_OF_SOULS_H_
 
-	//World Boss
-void AddSC_world_boss();
+#define MawOfSoulsScriptName "instance_maw_of_souls"
+#define DataHeader "MOS"
 
-// Maw of Souls
-void AddSC_instance_maw_of_souls();
-void AddSC_boss_ymiron_maw();
-void AddSC_boss_harbaron_maw();
-void AddSC_boss_helya_maw();
+uint32 const EncounterCount = 3;
 
+enum MOSDataTypes {
+	// Encounter States/Boss GUIDs
+	DATA_YMIRON_MAW = 0,
+	DATA_HARBARON_MAW = 1,
+	DATA_HELYA_MAW = 2,
+};
 
-// The name of this function should match:
-// void Add${NameOfDirectory}Scripts()
-void AddLegionScripts()
-{
-	//Zone Demon Hunter
-	AddSC_zone_demon_hunter();
-	
-	//World Boss
-	AddSC_world_boss();
-	
-	// Maw of Souls
-	AddSC_instance_maw_of_souls();
-	AddSC_boss_ymiron_maw();
-	AddSC_boss_harbaron_maw();
-	AddSC_boss_helya_maw();
+enum MOSCreatureIds {
+
+	// NPCs
+	NPC_YMIRON_MAW = 96756,
+	NPC_HARBARON_MAW = 96754,
+	NPC_SKJAL_MAW = 99307,
+	NPC_HELYA_MAW = 96759,
+
+	// Triggers
+
+};
+
+template<class AI>
+AI* GetMawOfSoulsAI(Creature* creature) {
+	return GetInstanceAI<AI>(creature, MawOfSoulsScriptName);
 }
+
+#endif // MAW_OF_SOULS_H_

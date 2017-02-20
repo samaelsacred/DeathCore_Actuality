@@ -18,6 +18,7 @@
 // This is where scripts' loading functions should be declared:
     
 /* Zone Pandaren */
+void AddSC_zone_pandaren();
 void AddSC_zone_isle_of_giants();
 
 /* Gate of the Setting Sun */
@@ -34,6 +35,7 @@ void AddSC_boss_striker_gadok();
 void AddPandariaScripts()
 {
     /* Zone Pandaren */
+    AddSC_zone_pandaren();
     AddSC_zone_isle_of_giants();
 
     /* Gate of the Setting Sun */

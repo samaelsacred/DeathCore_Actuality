@@ -17,19 +17,31 @@
 
 // This is where scripts' loading functions should be declared:
 	
-	//Zone Tanaan Jungle
+     //Instance Iron Docks
+void AddSC_instance_iron_docks(); 
+void AddSC_iron_docks();
+void AddSC_boss_fleshrender_nokgar();
+void AddSC_boss_grimrail_enforcers();
+
+	 //Zone Tanaan Jungle
 void AddSC_tanaan_jungle();
 
-	// Garrison Frostwall
+	 // Garrison Frostwall
 void AddSC_Garrison_Frostwall();
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
 void AddDraenorScripts()
 {
-	//Zone Tanaan Jungle
+		// Iron Docks
+    AddSC_instance_iron_docks();
+    AddSC_iron_docks();
+    AddSC_boss_fleshrender_nokgar();
+    AddSC_boss_grimrail_enforcers();
+	
+	   //Zone Tanaan Jungle
 	AddSC_tanaan_jungle();
 	
-	// Garrison Frostwall
+	  // Garrison Frostwall
 	AddSC_Garrison_Frostwall();
 }
