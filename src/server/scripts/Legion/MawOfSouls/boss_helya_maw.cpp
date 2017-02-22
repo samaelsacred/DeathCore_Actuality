@@ -155,7 +155,7 @@ public:
 				Talk(YELL_KILL);
 		}
 
-		void JustSummoned(Creature* summoned) override {
+		void JustSummoned(Creature* /*summoned*/) override {
 
 		}
 

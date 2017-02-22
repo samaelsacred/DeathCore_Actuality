@@ -149,7 +149,7 @@ class boss_ymiron_maw : public CreatureScript {
 				}
 			}
 
-			void SummonedCreatureDies(Creature* summoned, Unit* /*who*/) override {
+			void SummonedCreatureDies(Creature* /*summoned*/, Unit* /*who*/) override {
 				// Achievement Logic Missing
 			}
 
