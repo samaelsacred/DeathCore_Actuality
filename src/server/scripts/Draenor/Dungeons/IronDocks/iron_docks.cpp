@@ -53,7 +53,7 @@ class at_iron_docks_gauntlet_2 : public AreaTriggerScript
 public:
     at_iron_docks_gauntlet_2() : AreaTriggerScript("at_iron_docks_gauntlet_2") { }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* trigger, bool /*entered*/) override
+    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/, bool /*entered*/) override
     {
         if (InstanceScript* instance = player->GetInstanceScript())
             if (Creature* koramar = ObjectAccessor::GetCreature(*player, instance->GetGuidData(DATA_KORAMAR)))

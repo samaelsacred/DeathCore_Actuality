@@ -20,7 +20,7 @@
 #include "ScriptedGossip.h"
 #include "Player.h"
 #include "MapManager.h"
-#include "tanaan_jungle.h"
+#include "zone_tanaan_jungle.h"
 
 enum TanaanQuests
 {
