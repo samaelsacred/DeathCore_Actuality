@@ -19,6 +19,7 @@
 #define SC_GOSSIP_H
 
 #include "Define.h"
+#include "GossipDef.h"
 #include <string>
 
 class Creature;
