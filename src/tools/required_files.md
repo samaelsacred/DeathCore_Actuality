@@ -2,10 +2,10 @@
 [![Gitter](https://badges.gitter.im/NoffearrDeathProjecT/DeathCore.svg)](https://gitter.im/NoffearrDeathProjecT/DeathCore?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/NoffearrDeathProjecT/DeathCore.svg)](http://isitmaintained.com/project/NoffearrDeathProjecT/DeathCore "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/NoffearrDeathProjecT/DeathCore.svg)](http://isitmaintained.com/project/NoffearrDeathProjecT/DeathCore "Percentage of issues still open")
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/10635/badge.svg)]("https://scan.coverity.com/projects/noffearrdeathproject-deathcore)
 
-5.4.8 | 4.3.4 | 3.3.5
-:------------: | :------------: | :------------:
-[![5.4.8 Build Status](https://travis-ci.org/NoffearrDeathProjecT/DeathCore.svg?branch=5.4.8)](https://travis-ci.org/NoffearrDeathProjecT/DeathCore/builds) |[![4.3.4 Build Status](https://travis-ci.org/NoffearrDeathProjecT/DeathCore.svg?branch=4.3.4)](https://travis-ci.org/NoffearrDeathProjecT/DeathCore/builds) | [![3.3.5 Build Status](https://travis-ci.org/NoffearrDeathProjecT/DeathCore.svg?branch=3.3.5)](https://travis-ci.org/NoffearrDeathProjecT/DeathCore/builds)
-[![5.4.8 Build status](https://ci.appveyor.com/api/projects/status/qfnroow5ul7x7m86/branch/5.4.8?svg=true)](https://ci.appveyor.com/project/Bodeguero/deathcore/branch/5.4.8) | [![4.3.4 Build status](https://ci.appveyor.com/api/projects/status/qfnroow5ul7x7m86/branch/4.3.4?svg=true)](https://ci.appveyor.com/project/Bodeguero/deathcore/branch/4.3.4) | [![3.3.5 Build status](https://ci.appveyor.com/api/projects/status/qfnroow5ul7x7m86/branch/3.3.5?svg=true)](https://ci.appveyor.com/project/Bodeguero/deathcore/branch/3.3.5)
+5.4.8 | 3.3.5 | 4.3.4 | 7.x.x
+:------------: | :------------: | :------------: | :------------:
+[![5.4.8 Build Status](https://travis-ci.org/NoffearrDeathProjecT/DeathCore.svg?branch=5.4.8)](https://travis-ci.org/NoffearrDeathProjecT/DeathCore/builds) |[![3.3.5 Build Status](https://travis-ci.org/NoffearrDeathProjecT/DeathCore.svg?branch=3.3.5)](https://travis-ci.org/NoffearrDeathProjecT/DeathCore/builds) | [![4.3.4 Build Status](https://travis-ci.org/NoffearrDeathProjecT/DeathCore.svg?branch=4.3.4)](https://travis-ci.org/NoffearrDeathProjecT/DeathCore/builds) | [![7.x.x Build Status](https://travis-ci.org/NoffearrDeathProjecT/DeathCore.svg?branch=7.x.x)](https://travis-ci.org/NoffearrDeathProjecT/DeathCore/builds)
+[![5.4.8 Build status](https://ci.appveyor.com/api/projects/status/qfnroow5ul7x7m86/branch/5.4.8?svg=true)](https://ci.appveyor.com/project/Bodeguero/deathcore/branch/5.4.8) | [![3.3.5 Build status](https://ci.appveyor.com/api/projects/status/qfnroow5ul7x7m86/branch/3.3.5?svg=true)](https://ci.appveyor.com/project/Bodeguero/deathcore/branch/3.3.5) | [![4.3.4 Build status](https://ci.appveyor.com/api/projects/status/qfnroow5ul7x7m86/branch/4.3.4?svg=true)](https://ci.appveyor.com/project/Bodeguero/deathcore/branch/4.3.4) | [![7.x.x Build status](https://ci.appveyor.com/api/projects/status/qfnroow5ul7x7m86/branch/7.x.x?svg=true)](https://ci.appveyor.com/project/Bodeguero/deathcore/branch/7.x.x)
 
 ## Introduction
 
@@ -33,14 +33,12 @@ For more information about the project, visit our website at project [Noffearr D
 
 ##Required files
 
-[DeathCore_5.4.8_Db2](#)
+[DeathCore_5.4.8_Db2&Dbc](https://mega.nz/#!xsgCgZhJ!10IdF2J0H2nAlK8k_INEgFscUk-EGEXKBPZghGnQQbE)
 
-[DeathCore_5.4.8_Dbc](#)
+[DeathCore_5.4.8_Maps](https://mega.nz/#!skJSxY4Z!bFRQOHMcDdsa60sMdtMSLuBb_yBuKFsSX3SUNlIfiUc)
 
-[DeathCore_5.4.8_Maps](#)
+[DeathCore_5.4.8_Mmaps](https://mega.nz/#!9k5CxCxA!SVVERqyj-Z4S4qpdpQUnx-NoIAmGdyPpM_bSVpT1wVs)
 
-[DeathCore_5.4.8_Mmaps](#)
+[DeathCore_5.4.8_Vmaps](https://mega.nz/#!Zx5k2YZZ!vMg5m-q_Av_2w0FU472CWrxQgQYV6gBnRWDQfsh6BkA)
 
-[DeathCore_5.4.8_Vmaps](#)
-
-[DeathCore_5.4.8_Client](#)
+[DeathCore_5.4.8_Client](https://github.com/NoffearrDeathProjecT/DeathCore/raw/5.4.8/src/tools/Mist%20Of%20Pandaria%205.4.8%2018414.exe)
