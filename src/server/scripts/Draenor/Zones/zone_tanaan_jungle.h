@@ -28,8 +28,7 @@ namespace TanaanQuests
 {
     enum
     {
-        QuestStartDraenor                    = 36881,
-        QuestAzerothLastStand                = 35933,
+		QuestAzerothLastStand                = 35933,
         QuestOnslaughtEnd                    = 34392,
         QuestThePortalPower                  = 34393,
         QuestBledDryAlly                     = 35240,
@@ -55,7 +54,9 @@ namespace TanaanQuests
         QuestTheBattleOfTheForge             = 34439,
         QuestTakingATripToTheTopOfTheTank    = 35747,
         QuestGaNarOfTheFrostwolf             = 34442,
-        QuestShadowOfTheWorldbreaker         = 34958
+        QuestShadowOfTheWorldbreaker         = 34958,
+		QUEST_THE_DARK_PORTAL				 = 36881,
+		QUETS_THE_DARK_PORTAL_2				 = 34398
     };
 }
 
@@ -255,7 +256,8 @@ namespace TanaanZones
         AreaUmbralHalls                      = 7042,
         AreaBlackRockQuarry                  = 7043,
         AreaPathOfGlory                      = 7044,
-        TerrainSwapID                        = 1307
+        TerrainSwapID                        = 1307,
+		MAP_TANAAN = 1265
     };
 }
 

@@ -102,7 +102,8 @@ class instance_maw_of_souls : public InstanceMapScript {
 
 			void OnGameObjectCreate(GameObject* go) override {
 				switch(go->GetEntry()) {
-
+					case 0:
+						break;
 					default:
 						break;
 				}
@@ -175,7 +176,7 @@ class maw_players_resurrector : public CreatureScript {
 				checkInterval = _checkInterval;
 			}
 
-			void UpdateAI(uint32 /*diff*/) override {
+			void UpdateAI(uint32 diff) override {
 				if(checkInterval <= diff) {
 					if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 10.0f, true)) {
 						if(!target->IsAlive()) {
@@ -213,7 +214,7 @@ public:
 			shroudTimer = 6 * IN_MILLISECONDS;
 		}
 
-		void UpdateAI(uint32 /*diff*/) override {
+		void UpdateAI(uint32 diff) override {
 			if(!UpdateVictim()) {
 				if(auraRemoved) {
 					auraRemoved = false;
@@ -430,7 +431,7 @@ public:
 		}
 
 
-		void UpdateAI(uint32 /*diff*/) override {
+		void UpdateAI(uint32 diff) override {
 			if(!UpdateVictim())
 				return;
 

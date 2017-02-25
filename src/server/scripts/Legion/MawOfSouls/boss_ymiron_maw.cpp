@@ -209,7 +209,7 @@ class boss_ymiron_maw : public CreatureScript {
 						case EVENT_FALLEN:
 							DoCast(SPELL_FALLEN);
 							Talk(YELL_FALLEN);
-							for(int sphere = 0; sphere < activeSpheres; sphere++) {
+							for(size_t sphere = 0; sphere < activeSpheres; sphere++) {
 								if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true)) {
 									Position playerPosition = target->GetPosition();
 									me->SummonCreature(NPC_FALLEN_WARRIOR, playerPosition.m_positionX + getRandomFloat(-3.0f, 3.0f), playerPosition.m_positionY + getRandomFloat(-3.0f, 3.0f), playerPosition.m_positionZ, 2.0f, TEMPSUMMON_DEAD_DESPAWN);
