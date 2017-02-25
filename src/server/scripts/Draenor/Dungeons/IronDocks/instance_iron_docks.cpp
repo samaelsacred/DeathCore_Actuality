@@ -91,7 +91,7 @@ class instance_iron_docks : public InstanceMapScript
                 return true;
             }
 
-            void OnPlayerEnter(Player* player) override
+            void OnPlayerEnter(Player* /*player*/) override
             {
                 DoUpdateWorldState(9232, 1);
 

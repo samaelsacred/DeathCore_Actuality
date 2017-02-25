@@ -81,7 +81,7 @@ public:
         void Reset() override
         {
             _Reset();
-            if (dreadfang = me->SummonCreature(BOSS_DREADFANG, me->GetPosition(), TEMPSUMMON_MANUAL_DESPAWN))
+            if (dreadfang == (me->SummonCreature(BOSS_DREADFANG, me->GetPosition(), TEMPSUMMON_MANUAL_DESPAWN)))
                 me->EnterVehicle(dreadfang, 0);
         }
 

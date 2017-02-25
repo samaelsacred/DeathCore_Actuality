@@ -67,7 +67,7 @@ class at_iron_docks_gauntlet_3 : public AreaTriggerScript
 public:
     at_iron_docks_gauntlet_3() : AreaTriggerScript("at_iron_docks_gauntlet_3") { }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* trigger, bool /*entered*/) override
+    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/, bool /*entered*/) override
     {
         if (InstanceScript* instance = player->GetInstanceScript())
             if (Creature* skulloc = ObjectAccessor::GetCreature(*player, instance->GetGuidData(DATA_SKULLOC)))

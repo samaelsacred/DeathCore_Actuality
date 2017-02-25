@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
 static void DespawnCreaturesInArea(uint32 p_Entry, WorldObject* p_Object)
 {
     std::list<Creature*> l_Creatures;
@@ -24,7 +25,7 @@ static void DespawnCreaturesInArea(uint32 p_Entry, WorldObject* p_Object)
 
     for (std::list<Creature*>::iterator l_Iter = l_Creatures.begin(); l_Iter != l_Creatures.end(); ++l_Iter)
         (*l_Iter)->DespawnOrUnsummon();
-}
+}*/
 
 #define HostileFaction 16
 #define FriendlyFaction 35

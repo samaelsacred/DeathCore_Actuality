@@ -341,7 +341,7 @@ class npc_bane_skeleton : public CreatureScript {
 				vigorStackTimer = _vigorStackTimer;
 			}
 
-			void JustDied(Unit* killer) override {
+			void JustDied(Unit* /*killer*/) override {
 				// Handle mechanics when add killed by another one (for the achievement)
 			}
 

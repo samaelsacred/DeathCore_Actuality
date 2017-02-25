@@ -228,7 +228,7 @@ class npc_helya_maw_destructor_tentacle : public CreatureScript {
 				DoCastVictim(SPELL_DESTRUCTOR_RUPTURE);
 			}
 			
-			void EnterCombat(Unit* who) override {
+			void EnterCombat(Unit* /*who*/) override {
 
 			}
 
