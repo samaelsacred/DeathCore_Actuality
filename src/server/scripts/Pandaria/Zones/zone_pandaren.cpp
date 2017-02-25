@@ -1399,7 +1399,7 @@ public:
                 {
                     if (me->GetVehicleKit())
                     {
-                        if (Unit* passenger = me->GetVehicleKit()->GetPassenger(1))
+                        if (me->GetVehicleKit()->GetPassenger(1))
                         {
                             Start(false, true);
                             IntroTimer = 0;
