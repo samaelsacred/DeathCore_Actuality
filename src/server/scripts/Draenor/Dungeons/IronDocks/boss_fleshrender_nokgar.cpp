@@ -126,7 +126,7 @@ public:
             _DespawnAtEvade();
         }
 
-        void DamageTaken(Unit* /*attacker*/, uint32& damage) override
+        void DamageTaken(Unit* /*attacker*/, uint32& /*damage*/) override
         {
         }
 
@@ -230,7 +230,7 @@ public:
                     nokgar->AI()->DoAction(ACTION_DREADFANG_DIED);
         }
 
-        void DamageTaken(Unit* /*attacker*/, uint32& damage) override
+        void DamageTaken(Unit* /*attacker*/, uint32& /*damage*/) override
         {
             if (me->GetHealthPct() <= 50.0f && !_dismounted)
             {
