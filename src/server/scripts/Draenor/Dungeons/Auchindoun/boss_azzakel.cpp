@@ -97,19 +97,7 @@ Position const g_PositionAzzakelBlackgateLittle[4] =
     { 1953.55f, 2722.47f, 31.418f, 3.139304f },
     { 1869.70f, 2722.45f, 31.418f, 0.001632f }
 };
-
-static void HandleDoors(Unit* p_Me)
-{
-    std::list<GameObject*> l_ListGameObjects;
-	p_Me->GetGameObjectListWithEntryInGrid(l_ListGameObjects, eAuchindounObjects::GameobjectFelBarrier, 100.0f);
-    if (l_ListGameObjects.empty())
-        return;
-
-    for (GameObject* l_Itr : l_ListGameObjects)
-        l_Itr->Delete();
-}
-
-
+ 
 void AddSC_boss_azzakel()
 {
     

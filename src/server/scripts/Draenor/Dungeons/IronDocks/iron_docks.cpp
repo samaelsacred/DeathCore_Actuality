@@ -81,7 +81,7 @@ class at_iron_docks_gauntlet_4 : public AreaTriggerScript
 public:
     at_iron_docks_gauntlet_4() : AreaTriggerScript("at_iron_docks_gauntlet_4") { }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* trigger, bool /*entered*/) override
+    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/, bool /*entered*/) override
     {
         if (InstanceScript* instance = player->GetInstanceScript())
             if (Creature* koramar = ObjectAccessor::GetCreature(*player, instance->GetGuidData(DATA_KORAMAR)))
@@ -95,7 +95,7 @@ class at_iron_docks_gauntlet_5 : public AreaTriggerScript
 public:
     at_iron_docks_gauntlet_5() : AreaTriggerScript("at_iron_docks_gauntlet_5") { }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* trigger, bool /*entered*/) override
+    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/, bool /*entered*/) override
     {
         if (InstanceScript* instance = player->GetInstanceScript())
             if (Creature* koramar = ObjectAccessor::GetCreature(*player, instance->GetGuidData(DATA_KORAMAR)))
@@ -116,7 +116,7 @@ class at_iron_docks_oshir_intro : public AreaTriggerScript
 public:
     at_iron_docks_oshir_intro() : AreaTriggerScript("at_iron_docks_oshir_intro") { }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* trigger, bool /*entered*/) override
+    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/, bool /*entered*/) override
     {
         if (InstanceScript* instance = player->GetInstanceScript())
             if (Creature* koramar = ObjectAccessor::GetCreature(*player, instance->GetGuidData(DATA_KORAMAR)))
