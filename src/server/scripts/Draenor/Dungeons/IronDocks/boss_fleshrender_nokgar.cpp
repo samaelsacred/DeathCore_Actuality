@@ -152,11 +152,11 @@ public:
             _JustReachedHome();
         }
 
-        void MovementInform(uint32 type, uint32 point) override
+        /*void MovementInform(uint32 type, uint32 point) override
         {
             if (type != POINT_MOTION_TYPE && type != EFFECT_MOTION_TYPE)
                 return;
-        }
+        }*/
 
         void UpdateAI(uint32 diff) override
         {
