@@ -240,7 +240,7 @@ public:
             }
         }
 
-        void DoAction(int32 action) override
+        void DoAction(int32 /*action*/) override
         {
         }
 
