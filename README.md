@@ -19,6 +19,16 @@ If you wish to contribute ideas or code please visit our website at the link bel
 
 For more information about the project, visit our website at project [Noffearr Death ProjecT™] (http://www.noffearrdeathproject.org/)
 
+## Requirements
+
+Platform: Linux, Windows or Mac
+Processor supporting SSE2
+ACE = 5.8.3 (included for Windows)
+MySQL = 5.1.0 (included for Windows)
+CMake = 2.8.0
+OpenSSL = 1.0.0
+GCC = 4.7.2 (Linux only)
+MS Visual Studio = 14 (2015)(Windows only)
 
 ## Requirements
 
